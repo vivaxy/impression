@@ -124,11 +124,11 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
 - [onScreen](https://github.com/silvestreh/onScreen)
 - [onScreen](https://vivaxyblog.github.io/2016/08/17/is-element-on-screen.html)
 
-[npm-version-image]: http://img.shields.io/npm/v/serve-here.svg?style=flat-square
-[npm-url]: https://www.npmjs.com/package/serve-here
-[npm-downloads-image]: http://img.shields.io/npm/dm/serve-here.svg?style=flat-square
+[npm-version-image]: http://img.shields.io/npm/v/impression.js.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/impression.js
+[npm-downloads-image]: http://img.shields.io/npm/dm/impression.js.svg?style=flat-square
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
 [license-url]: LICENSE
-[nodei-dl-image]: https://nodei.co/npm-dl/serve-here.png?height=3
-[nodei-url]: https://nodei.co/npm/serve-here/
-[nodei-image]: https://nodei.co/npm/serve-here.svg?downloads=true&downloadRank=true&stars=true
+[nodei-dl-image]: https://nodei.co/npm-dl/impression.js.png?height=3
+[nodei-url]: https://nodei.co/npm/impression.js/
+[nodei-image]: https://nodei.co/npm/impression.js.svg?downloads=true&downloadRank=true&stars=true
