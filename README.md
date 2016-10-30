@@ -29,7 +29,7 @@ Use [standalone](./bundle/index.js), wrapped in umd, bundled with webpack.
 ## Usage
 
 ```js
-import Impression from 'impression';
+import Impression from 'impression.js';
 let impression = new Impression();
 let element = document.querySelector('#test');
 impression.isViewable(element); // => true
