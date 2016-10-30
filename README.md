@@ -1,7 +1,5 @@
 # impression
 
-🚧🚧🚧 UNDERCONSTRUCTION 🚧🚧🚧
-
 Element [impression](https://en.wikipedia.org/wiki/Impression_(online_media)), for ads or user behaviour statistics.
 
 Written in es6 javascript, published as npm package as es5 as long as a browser standalone.
@@ -69,9 +67,21 @@ Only accepts a single element.
 
 ### tolerance
 
+The number of pixels an element is allowed to enter its container boundaries before calling its callback.
+
+default `0`
+
 ### debounce
 
+The number of milliseconds to wait before calling an element's callback after the changes.
+ 
+default `100`
+
 ### container
+
+The container of the elements you want to track.
+ 
+default `window`
 
 ## Events
 
@@ -94,3 +104,4 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
 ## Reference
 
 - [onScreen](https://github.com/silvestreh/onScreen)
+- [onScreen](https://vivaxyblog.github.io/2016/08/17/is-element-on-screen.html)
