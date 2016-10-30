@@ -2,7 +2,7 @@
   "name": "impression",
   "version": "0.0.0",
   "description": "impression",
-  "main": "build/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "npm run build:dist && npm run build:bundle",
     "build:dist": "babel ./source --out-dir ./dist",
