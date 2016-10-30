@@ -5,10 +5,19 @@
 
 import attributesValidator from '../validators/attributes';
 import stylesValidator from '../validators/styles';
+import inContainer from '../validators/inContainer';
+import onScreen from '../validators/onScreen';
 
-export default (element) => {
+export default (element, container, tolerance) => {
     let visible = true;
     let currentNode = element;
+
+    if (container === window) {
+        visible = onScreen(element, tolerance);
+    } else {
+        visible = inContainer(element, container, tolerance);
+    }
+
     while (currentNode.parentNode && visible) {
         visible = attributesValidator(currentNode) && stylesValidator(currentNode);
         currentNode = currentNode.parentNode;
