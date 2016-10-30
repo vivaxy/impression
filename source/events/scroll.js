@@ -3,27 +3,37 @@
  * @author vivaxy
  */
 
+import presets from '../lib/presets';
+
+const SCROLL = 'scroll';
+
 export default (container) => {
     let attached = false;
 
-    return (callback) => {
+    const on = (callback) => {
         if (attached) {
             return false;
         } else {
             attached = true;
-
-            // for calculating offset
-            if (container instanceof HTMLElement) {
-                const style = window.getComputedStyle(container);
-
-                if (style.position === 'static') {
-                    container.style.position = 'relative';
-                }
-            }
-
-            container.addEventListener('scroll', callback);
+            presets(container);
+            container.addEventListener(SCROLL, callback);
 
             return true;
         }
+    };
+
+    const off = (callback) => {
+        if (attached) {
+            container.removeEventListener(SCROLL, callback);
+            attached = false;
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    return {
+        on,
+        off,
     };
 };
