@@ -1,5 +1,13 @@
 # impression
 
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
+[![MIT License][license-image]][license-url]
+
+[![NPM][nodei-image]][nodei-url]
+
+[![NPM][nodei-dl-image]][nodei-url]
+
 Element [impression](https://en.wikipedia.org/wiki/Impression_(online_media)), for ads or user behaviour statistics.
 
 Written in es6 javascript, published as npm package as es5 along with a browser standalone.
@@ -115,3 +123,12 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
 
 - [onScreen](https://github.com/silvestreh/onScreen)
 - [onScreen](https://vivaxyblog.github.io/2016/08/17/is-element-on-screen.html)
+
+[npm-version-image]: http://img.shields.io/npm/v/serve-here.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/serve-here
+[npm-downloads-image]: http://img.shields.io/npm/dm/serve-here.svg?style=flat-square
+[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[license-url]: LICENSE
+[nodei-dl-image]: https://nodei.co/npm-dl/serve-here.png?height=3
+[nodei-url]: https://nodei.co/npm/serve-here/
+[nodei-image]: https://nodei.co/npm/serve-here.svg?downloads=true&downloadRank=true&stars=true
