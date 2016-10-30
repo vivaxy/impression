@@ -46,8 +46,11 @@ Only accepts a single element.
 ### `off` => `impression`
 
 `impression.off(event, selector, callback)`
+
 `impression.off(event, selector)`
+
 `impression.off(event)`
+
 `impression.off()`
 
 ### `attach` => `impression`
@@ -71,6 +74,24 @@ Only accepts a single element.
 ### begin
 
 ### end
+
+## Type
+
+### mutation
+
+### scroll
+
+### resize
+
+## Direction
+
+### left
+
+### right
+
+### top
+
+### bottom
 
 ## Reference
 
