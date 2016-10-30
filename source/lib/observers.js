@@ -8,7 +8,7 @@ import resizeEvents from '../observers/resize';
 import scrollEvents from '../observers/scroll';
 
 export default (container) => {
-    let mutationListener = mutationEvents(container);
+    let mutationListener = mutationEvents(document.body);
     let resizeListener = resizeEvents(container);
     let scrollListener = scrollEvents(container);
 

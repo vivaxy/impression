@@ -4,12 +4,49 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>impression</title>
+    <style>
+        body {
+            margin: 0;
+            font-size: 0;
+        }
+
+        .container {
+            width: 300px;
+            height: 300px;
+            display: inline-block;
+        }
+
+        [data-impression-unique-id="1"] {
+            background-color: #f00;
+        }
+
+        [data-impression-unique-id="2"] {
+            background-color: #0ff;
+        }
+
+        [data-impression-unique-id="3"] {
+            background-color: #f0f;
+        }
+
+        [data-impression-unique-id="4"] {
+            background-color: #00f;
+        }
+    </style>
 </head>
 <body>
+<div class="container" data-impression-unique-id="1"></div>
+<div class="container" data-impression-unique-id="2"></div>
+<div class="container" data-impression-unique-id="3"></div>
+<div class="container" data-impression-unique-id="4"></div>
 <script src="../bundle/index.js"></script>
 <script>
     var impression = new Impression();
-    console.log(impression);
+    impression.on('begin', '[data-impression-unique-id="4"]', (element) => {
+        console.log('begin', element);
+    });
+    impression.on('end', '[data-impression-unique-id="4"]', (element) => {
+        console.log('end', element);
+    });
 </script>
 </body>
 </html>

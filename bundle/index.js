@@ -56,26 +56,36 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @since 2016-10-28 12:21
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author vivaxy
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
 	var _events = __webpack_require__(1);
 
 	var _events2 = _interopRequireDefault(_events);
+
+	var _validators = __webpack_require__(2);
+
+	var _validators2 = _interopRequireDefault(_validators);
+
+	var _observers = __webpack_require__(7);
+
+	var _observers2 = _interopRequireDefault(_observers);
+
+	var _debounce = __webpack_require__(12);
+
+	var _debounce2 = _interopRequireDefault(_debounce);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @since 2016-10-28 12:21
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author vivaxy
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
 	var EventEmitter = _events2.default.EventEmitter;
+	var BEGIN = 'begin';
+	var END = 'end';
 
-	module.exports = function (_EventEmitter) {
-	    _inherits(_class, _EventEmitter);
-
+	module.exports = function () {
 	    function _class() {
 	        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
 	            tolerance: 0,
@@ -85,11 +95,187 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, _class);
 
-	        return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this));
+	        var tolerance = options.tolerance,
+	            debounce = options.debounce,
+	            container = options.container;
+
+	        // todo validate options
+
+	        this._attached = false;
+	        this._trackedElements = {};
+	        this._tolerance = tolerance;
+	        this._debounce = debounce;
+	        this._container = container;
+	        this._observers = (0, _observers2.default)(this._container);
+	        this._handler = (0, _debounce2.default)(this._handlers.bind(this), this._debounce);
+	        this._events = new EventEmitter();
+
+	        this.attach();
 	    }
 
+	    _createClass(_class, [{
+	        key: 'attach',
+	        value: function attach() {
+	            if (!this._attached) {
+	                this._attached = true;
+	                this._observers.on(this._handler);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'detach',
+	        value: function detach() {
+	            if (this._attached) {
+	                this._observers.off(this._handler);
+	                this._attached = false;
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'isViewable',
+	        value: function isViewable(element) {
+	            return (0, _validators2.default)(element, this._container, this._tolerance);
+	        }
+	    }, {
+	        key: 'once',
+	        value: function once(event, selector, callback) {
+	            if (!this._trackedElements[selector]) {
+	                this._trackedElements[selector] = {};
+	            }
+	            var tracked = this._trackedElements[selector];
+	            if (!tracked.nodes) {
+	                tracked.nodes = [];
+	            }
+	            if (!tracked.events) {
+	                tracked.events = new EventEmitter();
+	            }
+	            tracked.events.once(event, callback);
+	            return this;
+	        }
+	    }, {
+	        key: 'on',
+	        value: function on(event, selector, callback) {
+	            if (!this._trackedElements[selector]) {
+	                this._trackedElements[selector] = {};
+	            }
+	            var tracked = this._trackedElements[selector];
+	            if (!tracked.nodes) {
+	                tracked.nodes = [];
+	            }
+	            if (!tracked.events) {
+	                tracked.events = new EventEmitter();
+	            }
+	            tracked.events.on(event, callback);
+	            return this;
+	        }
+	    }, {
+	        key: 'off',
+	        value: function off(event, selector, callback) {
+	            var trackedElements = this._trackedElements;
+
+	            if (event) {
+	                if (selector) {
+	                    if (callback) {
+	                        // event, selector, callback: remove single callback for this selector, this event
+	                        var tracked = trackedElements[selector];
+	                        if (tracked && tracked.events) {
+	                            tracked.events.removeListener(event, callback);
+	                        }
+	                    } else {
+	                        // event, selector: remove all callbacks for this selector, this event
+	                        var _tracked = trackedElements[selector];
+	                        if (_tracked && _tracked.events) {
+	                            _tracked.events.removeAllListeners(event);
+	                        }
+	                    }
+	                } else {
+	                    // event: remove all callbacks for all selectors, this event
+	                    Object.keys(trackedElements).forEach(function (selector) {
+	                        var tracked = trackedElements[selector];
+	                        if (tracked && tracked.events) {
+	                            tracked.events.removeAllListeners(event);
+	                        }
+	                    });
+	                }
+	                // clean up useless tracked
+	                Object.keys(trackedElements).forEach(function (selector) {
+	                    var tracked = trackedElements[selector];
+	                    if (tracked && tracked.events) {
+	                        if (tracked.events.listenerCount(BEGIN) === 0 && tracked.events.listenerCount(END) === 0) {
+	                            Reflect.deleteProperty(trackedElements, selector);
+	                        }
+	                    }
+	                });
+	            } else {
+	                // : remove all callbacks for all selectors, all events
+	                Object.keys(trackedElements).forEach(function (selector) {
+	                    Reflect.deleteProperty(trackedElements, selector);
+	                });
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: '_handlers',
+	        value: function _handlers() {
+	            var _this = this;
+
+	            var trackedElements = this._trackedElements;
+	            var selectors = Object.keys(trackedElements);
+
+	            selectors.forEach(function (selector) {
+	                var tracked = trackedElements[selector];
+	                var previousNodes = tracked.nodes;
+
+	                tracked.nodes = [];
+
+	                var currentNodes = document.querySelectorAll(selector);
+
+	                Array.prototype.forEach.call(currentNodes, function (currentNode) {
+	                    var wasVisible = false;
+	                    if (previousNodes) {
+	                        previousNodes.forEach(function (previousItem) {
+	                            var previousNode = previousItem.node;
+	                            if (!previousItem.marked && previousNode === currentNode) {
+	                                wasVisible = previousItem.isVisible;
+	                                previousItem.marked = true;
+	                            }
+	                        });
+	                    }
+
+	                    var item = {
+	                        isVisible: _this.isViewable(currentNode),
+	                        wasVisible: wasVisible,
+	                        node: currentNode
+	                    };
+
+	                    tracked.nodes.push(item);
+
+	                    if (item.isVisible === true && item.wasVisible === false) {
+	                        tracked.events.emit(BEGIN, selector, currentNode);
+	                    }
+	                    if (item.isVisible === false && item.wasVisible === true) {
+	                        tracked.events.emit(END, selector, currentNode);
+	                    }
+	                });
+
+	                if (previousNodes) {
+	                    // for removed nodes
+	                    previousNodes.forEach(function (previousItem) {
+	                        if (!previousItem.marked) {
+	                            if (previousItem.wasVisible) {
+	                                tracked.events.emit(END, selector, previousItem.node);
+	                            }
+	                        }
+	                    });
+	                }
+	            });
+
+	            return this;
+	        }
+	    }]);
+
 	    return _class;
-	}(EventEmitter);
+	}();
 
 /***/ },
 /* 1 */
@@ -398,6 +584,473 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return arg === void 0;
 	}
 
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _attributes = __webpack_require__(3);
+
+	var _attributes2 = _interopRequireDefault(_attributes);
+
+	var _styles = __webpack_require__(4);
+
+	var _styles2 = _interopRequireDefault(_styles);
+
+	var _inContainer = __webpack_require__(5);
+
+	var _inContainer2 = _interopRequireDefault(_inContainer);
+
+	var _onScreen = __webpack_require__(6);
+
+	var _onScreen2 = _interopRequireDefault(_onScreen);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * check if an element is viewable
+	 * @param element {Node}
+	 * @param container {Node}
+	 * @param tolerance {Number}
+	 * @returns {boolean}
+	 */
+	/**
+	 * @since 2016-10-30 14:52
+	 * @author vivaxy
+	 */
+
+	exports.default = function (element, container, tolerance) {
+	    var visible = true;
+	    var currentNode = element;
+
+	    if (container === window) {
+	        visible = (0, _onScreen2.default)(element, tolerance);
+	    } else {
+	        visible = (0, _inContainer2.default)(element, container, tolerance);
+	    }
+
+	    while (currentNode.parentNode && visible) {
+	        visible = (0, _attributes2.default)(currentNode) && (0, _styles2.default)(currentNode);
+	        currentNode = currentNode.parentNode;
+	    }
+	    return visible;
+	};
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
+	 * @since 2016-10-30 14:49
+	 * @author vivaxy
+	 */
+
+	var attributesToCheck = {
+	    hidden: true
+	};
+
+	exports.default = function (element) {
+	    return !Object.keys(attributesToCheck).some(function (attr) {
+	        return element[attr] === attributesToCheck[attr];
+	    });
+	};
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
+	 * @since 2016-10-30 14:53
+	 * @author vivaxy
+	 */
+
+	var stylesToCheck = {
+	    display: 'none',
+	    visibility: 'hidden'
+	};
+
+	exports.default = function (element) {
+	    var style = window.getComputedStyle(element);
+	    return !Object.keys(stylesToCheck).some(function (attr) {
+	        return style[attr] === stylesToCheck[attr];
+	    });
+	};
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	/**
+	 * @since 2016-10-30 14:59
+	 * @author vivaxy
+	 */
+
+	exports.default = function (element) {
+	    var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
+	    var tolerance = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+
+	    var containerRect = container.getBoundingClientRect();
+
+	    var top = element.offsetTop + tolerance < containerRect.height + container.scrollTop;
+	    var bottom = element.offsetTop + element.clientHeight - tolerance > container.scrollTop;
+	    var left = element.offsetLeft + tolerance < containerRect.width + container.scrollLeft;
+	    var right = element.offsetLeft + element.clientWidth - tolerance > container.scrollLeft;
+
+	    return top && bottom && left && right;
+	};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	/**
+	 * @since 2016-10-30 14:55
+	 * @author vivaxy
+	 */
+
+	exports.default = function (element, tolerance) {
+
+	    var rect = element.getBoundingClientRect();
+	    var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+	    var windowWidth = window.innerWidth || document.documentElement.clientWidth;
+
+	    var elementHeight = element.offsetHeight;
+	    var elementWidth = element.offsetWidth;
+
+	    var onScreenHeight = tolerance > elementHeight ? elementHeight : tolerance;
+	    var onScreenWidth = tolerance > elementWidth ? elementWidth : tolerance;
+
+	    // top
+	    var elementBottomToWindowTop = rect.top + elementHeight;
+	    var bottomBoundingOnScreen = elementBottomToWindowTop >= onScreenHeight;
+
+	    // bottom
+	    var elementTopToWindowBottom = windowHeight - (rect.bottom - elementHeight);
+	    var topBoundingOnScreen = elementTopToWindowBottom >= onScreenHeight;
+
+	    // left
+	    var elementRightToWindowLeft = rect.left + elementWidth;
+	    var rightBoundingOnScreen = elementRightToWindowLeft >= onScreenWidth;
+
+	    // right
+	    var elementLeftToWindowRight = windowWidth - (rect.right - elementWidth);
+	    var leftBoundingOnScreen = elementLeftToWindowRight >= onScreenWidth;
+
+	    return bottomBoundingOnScreen && topBoundingOnScreen && rightBoundingOnScreen && leftBoundingOnScreen;
+	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _mutation = __webpack_require__(8);
+
+	var _mutation2 = _interopRequireDefault(_mutation);
+
+	var _resize = __webpack_require__(10);
+
+	var _resize2 = _interopRequireDefault(_resize);
+
+	var _scroll = __webpack_require__(11);
+
+	var _scroll2 = _interopRequireDefault(_scroll);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (container) {
+	    var mutationListener = (0, _mutation2.default)(document.body);
+	    var resizeListener = (0, _resize2.default)(container);
+	    var scrollListener = (0, _scroll2.default)(container);
+
+	    var on = function on(callback) {
+	        mutationListener.on(callback);
+	        resizeListener.on(callback);
+	        scrollListener.on(callback);
+	        return true;
+	    };
+
+	    var off = function off(callback) {
+	        mutationListener.off(callback);
+	        resizeListener.off(callback);
+	        scrollListener.off(callback);
+	        return true;
+	    };
+
+	    return {
+	        on: on,
+	        off: off
+	    };
+	}; /**
+	    * @since 2016-10-30 15:12
+	    * @author vivaxy
+	    */
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _presets = __webpack_require__(9);
+
+	var _presets2 = _interopRequireDefault(_presets);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var DOM_NODE_INSERTED = 'DOMNodeInserted'; /**
+	                                            * @since 2016-10-30 14:24
+	                                            * @author vivaxy
+	                                            */
+
+	var DOM_NODE_REMOVED = 'DOMNodeRemoved';
+	var DOM_ATTR_MODIFIED = 'DOMAttrModified';
+	var DOM_SUBTREE_MODIFIED = 'DOMSubtreeModified';
+
+	exports.default = function (container) {
+	    var attached = void 0;
+	    var mutationObserver = void 0;
+
+	    var on = function on(callback) {
+	        if (attached) {
+	            return false;
+	        } else {
+	            attached = true;
+	            (0, _presets2.default)(container);
+	            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+	            if (MutationObserver) {
+	                mutationObserver = new MutationObserver(callback);
+	                mutationObserver.observe(container, {
+	                    childList: true,
+	                    attributes: true,
+	                    subtree: true
+	                });
+	            } else {
+	                container.addEventListener(DOM_NODE_INSERTED, callback);
+	                container.addEventListener(DOM_NODE_REMOVED, callback);
+	                container.addEventListener(DOM_ATTR_MODIFIED, callback);
+	                container.addEventListener(DOM_SUBTREE_MODIFIED, callback);
+	            }
+	            return true;
+	        }
+	    };
+
+	    var off = function off(callback) {
+	        if (attached) {
+	            if (mutationObserver) {
+	                mutationObserver.disconnect();
+	            } else {
+	                container.removeEventListener(DOM_NODE_INSERTED, callback);
+	                container.removeEventListener(DOM_NODE_REMOVED, callback);
+	                container.removeEventListener(DOM_ATTR_MODIFIED, callback);
+	                container.removeEventListener(DOM_SUBTREE_MODIFIED, callback);
+	            }
+	            attached = false;
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    };
+
+	    return {
+	        on: on,
+	        off: off
+	    };
+	};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
+	 * @since 2016-10-30 14:35
+	 * @author vivaxy
+	 */
+
+	var STATIC = 'static';
+	var RELATIVE = 'relative';
+
+	exports.default = function (container) {
+	    // for calculating offset
+	    if (container instanceof HTMLElement) {
+	        var style = window.getComputedStyle(container);
+
+	        if (style.position === STATIC) {
+	            container.style.position = RELATIVE;
+	        }
+	    }
+	};
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _presets = __webpack_require__(9);
+
+	var _presets2 = _interopRequireDefault(_presets);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var RESIZE = 'resize'; /**
+	                        * @since 2016-10-30 14:24
+	                        * @author vivaxy
+	                        */
+
+	exports.default = function (container) {
+	    var attached = false;
+
+	    var on = function on(callback) {
+	        if (attached) {
+	            return false;
+	        } else {
+	            attached = true;
+	            (0, _presets2.default)(container);
+	            container.addEventListener(RESIZE, callback);
+	            return true;
+	        }
+	    };
+
+	    var off = function off(callback) {
+	        if (attached) {
+	            container.removeEventListener(RESIZE, callback);
+	            attached = false;
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    };
+
+	    return {
+	        on: on,
+	        off: off
+	    };
+	};
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _presets = __webpack_require__(9);
+
+	var _presets2 = _interopRequireDefault(_presets);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SCROLL = 'scroll'; /**
+	                        * @since 2016-10-30 14:17
+	                        * @author vivaxy
+	                        */
+
+	exports.default = function (container) {
+	    var attached = false;
+
+	    var on = function on(callback) {
+	        if (attached) {
+	            return false;
+	        } else {
+	            attached = true;
+	            (0, _presets2.default)(container);
+	            container.addEventListener(SCROLL, callback);
+
+	            return true;
+	        }
+	    };
+
+	    var off = function off(callback) {
+	        if (attached) {
+	            container.removeEventListener(SCROLL, callback);
+	            attached = false;
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    };
+
+	    return {
+	        on: on,
+	        off: off
+	    };
+	};
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	/**
+	 * @since 2016-10-30 14:47
+	 * @author vivaxy
+	 */
+
+	exports.default = function (callback, timeout) {
+	    var timer = void 0;
+
+	    return function () {
+	        clearTimeout(timer);
+
+	        timer = setTimeout(callback, timeout);
+	    };
+	};
 
 /***/ }
 /******/ ])

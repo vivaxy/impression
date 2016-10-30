@@ -12,7 +12,6 @@ import debounceCallback from './lib/debounce';
 const EventEmitter = events.EventEmitter;
 const BEGIN = 'begin';
 const END = 'end';
-const CHANGE = 'change';
 
 module.exports = class {
 
@@ -21,7 +20,6 @@ module.exports = class {
         debounce: 100,
         container: window,
     }) {
-        super();
         const {
             tolerance,
             debounce,
@@ -43,7 +41,7 @@ module.exports = class {
     }
 
     attach() {
-        if (this._attached) {
+        if (!this._attached) {
             this._attached = true;
             this._observers.on(this._handler);
         }
@@ -138,8 +136,6 @@ module.exports = class {
     }
 
     _handlers() {
-
-        this._events.emit(CHANGE);
 
         const trackedElements = this._trackedElements;
         const selectors = Object.keys(trackedElements);

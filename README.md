@@ -91,14 +91,6 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
 });
 ```
 
-### change
-
-```js
-impression.on('change', () => {
-    // mutation, scroll or resize happends
-});
-```
-
 ## Reference
 
 - [onScreen](https://github.com/silvestreh/onScreen)
