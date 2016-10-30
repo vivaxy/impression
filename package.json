@@ -4,7 +4,9 @@
   "description": "impression",
   "main": "build/index.js",
   "scripts": {
-    "build": "babel ./source --out-dir ./build"
+    "build": "npm run build:dist && npm run build:bundle",
+    "build:dist": "babel ./source --out-dir ./dist",
+    "build:bundle": "webpack"
   },
   "repository": {
     "type": "git",

@@ -7,7 +7,7 @@ import events  from 'events';
 
 const EventEmitter = events.EventEmitter;
 
-export default class Impression extends EventEmitter {
+module.exports = class extends EventEmitter {
 
     constructor(options = {
         tolerance: 0,
@@ -18,4 +18,4 @@ export default class Impression extends EventEmitter {
 
     }
 
-}
+};

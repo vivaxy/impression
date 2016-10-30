@@ -1,10 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = undefined;
-
 var _events = require('events');
 
 var _events2 = _interopRequireDefault(_events);
@@ -22,16 +17,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var EventEmitter = _events2.default.EventEmitter;
 
-var Impression = function (_EventEmitter) {
-    _inherits(Impression, _EventEmitter);
+module.exports = function (_EventEmitter) {
+    _inherits(_class, _EventEmitter);
 
-    function Impression(selector) {
-        _classCallCheck(this, Impression);
+    function _class() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+            tolerance: 0,
+            debounce: 100,
+            container: window
+        };
 
-        return _possibleConstructorReturn(this, (Impression.__proto__ || Object.getPrototypeOf(Impression)).call(this));
+        _classCallCheck(this, _class);
+
+        return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this));
     }
 
-    return Impression;
+    return _class;
 }(EventEmitter);
-
-exports.default = Impression;
