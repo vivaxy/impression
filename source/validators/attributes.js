@@ -7,18 +7,8 @@ const attributesToCheck = {
     hidden: true,
 };
 
-const isElementVisible = (element) => {
+export default (element) => {
     return !Object.keys(attributesToCheck).some((attr) => {
         return element[attr] === attributesToCheck[attr];
     });
-};
-
-export default (element) => {
-    let visible = true;
-    let currentNode = element;
-    while (currentNode.parentNode && visible) {
-        visible = isElementVisible(currentNode);
-        currentNode = currentNode.parentNode;
-    }
-    return visible;
 };
