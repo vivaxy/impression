@@ -122,7 +122,7 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
 ## Reference
 
 - [onScreen](https://github.com/silvestreh/onScreen)
-- [onScreen](https://vivaxyblog.github.io/2016/08/17/is-element-on-screen.html)
+- [判断元素是否在屏幕中出现](https://vivaxyblog.github.io/2016/08/17/is-element-on-screen.html)
 
 [npm-version-image]: http://img.shields.io/npm/v/impression.js.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/impression.js
