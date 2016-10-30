@@ -17,11 +17,11 @@ import Impression from 'impression';
 let impression = new Impression();
 let element = document.querySelector('#test');
 impression.isViewable(element); // => true
-impression.on('begin', '#test', (element, { type, direction }) => {
-    console.log(`element begined by ${type} from ${direction}`, element);
+impression.on('begin', '#test', (element) => {
+    console.log(`element shown into view`, element);
 });
-impression.on('end', '#test', (element, { type, direction }) => {
-    console.log(`element ended by ${type} from ${direction}`, element);
+impression.on('end', '#test', (element) => {
+    console.log(`element shown out of view`, element);
 });
 ```
 
@@ -31,7 +31,7 @@ impression.on('end', '#test', (element, { type, direction }) => {
 
 `let impression = new Impression(options)`
 
-### `isViewable` => `impression`
+### `isViewable` => `{Boolean}`
 
 `impression.isViewable(element)`
 
@@ -53,6 +53,10 @@ Only accepts a single element.
 
 `impression.off()`
 
+### `once` => `impression`
+
+`impression.once(event, selector, callback)`
+
 ### `attach` => `impression`
 
 `impression.attach()`
@@ -73,25 +77,27 @@ Only accepts a single element.
 
 ### begin
 
+```js
+impression.on('begin', '[data-impression-uniqueid="1"]', (element) => {
+    // => which element begins to impression
+});
+```
+
 ### end
 
-## Type
+```js
+impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
+    // => which element's impression ends
+});
+```
 
-### mutation
+### change
 
-### scroll
-
-### resize
-
-## Direction
-
-### left
-
-### right
-
-### top
-
-### bottom
+```js
+impression.on('change', () => {
+    // mutation, scroll or resize happends
+});
+```
 
 ## Reference
 

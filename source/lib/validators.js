@@ -8,6 +8,13 @@ import stylesValidator from '../validators/styles';
 import inContainer from '../validators/inContainer';
 import onScreen from '../validators/onScreen';
 
+/**
+ * check if an element is viewable
+ * @param element {Node}
+ * @param container {Node}
+ * @param tolerance {Number}
+ * @returns {boolean}
+ */
 export default (element, container, tolerance) => {
     let visible = true;
     let currentNode = element;
