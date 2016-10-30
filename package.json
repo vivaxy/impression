@@ -1,5 +1,5 @@
 {
-  "name": "impression",
+  "name": "impression.js",
   "version": "0.0.0",
   "description": "impression",
   "main": "./dist/index.js",

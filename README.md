@@ -2,11 +2,21 @@
 
 Element [impression](https://en.wikipedia.org/wiki/Impression_(online_media)), for ads or user behaviour statistics.
 
-Written in es6 javascript, published as npm package as es5 as long as a browser standalone.
+Written in es6 javascript, published as npm package as es5 along with a browser standalone.
 
 ## Browser support
 
 IE9+, chrome, safari, firefox, opera...
+
+## Installation
+
+### npm
+
+`npm install impression.js`
+
+### browser
+
+Use [standalone](./bundle/index.js), wrapped in umd, bundled with webpack.
 
 ## Usage
 
