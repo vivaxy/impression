@@ -7,6 +7,7 @@
     "build": "npm run build:dist && npm run build:bundle",
     "build:dist": "babel ./source --out-dir ./dist",
     "build:bundle": "webpack",
+    "test:test": "phantomjs ./node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/index.html spec '{\"hooks\": \"mocha-phantomjs-istanbul\", \"coverageFile\": \".coverage.json\"}'",
     "test:local": "istanbul cover _mocha -- -R spec --require babel-register",
     "test": "npm run test:local && codecov"
   },
@@ -38,6 +39,8 @@
     "codecov": "^1.0.1",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.1.2",
+    "mocha-phantomjs-istanbul": "0.0.2",
+    "phantomjs": "^2.1.7",
     "webpack": "^1.13.3"
   },
   "dependencies": {

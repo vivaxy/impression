@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>impression</title>
+    <link href="../node_modules/mocha/mocha.css" rel="stylesheet"/>
     <style>
         body {
             margin: 0;
@@ -34,19 +35,18 @@
     </style>
 </head>
 <body>
-<div class="container" data-impression-unique-id="1"></div>
-<div class="container" data-impression-unique-id="2"></div>
-<div class="container" data-impression-unique-id="3"></div>
-<div class="container" data-impression-unique-id="4"></div>
-<script src="../bundle/index.js"></script>
+<div id="mocha"></div>
+<script src="../node_modules/mocha/mocha.js"></script>
 <script>
-    var impression = new Impression();
-    impression.on('begin', '[data-impression-unique-id="4"]', (element) => {
-        console.log('begin', element);
-    });
-    impression.on('end', '[data-impression-unique-id="4"]', (element) => {
-        console.log('end', element);
-    });
+    mocha.ui('bdd');
+    mocha.reporter('html');
+</script>
+<script src="./index.js"></script>
+<script>
+    if (typeof initMochaPhantomJS === 'function') {
+        initMochaPhantomJS();
+    }
+    mocha.run();
 </script>
 </body>
 </html>
