@@ -1,5 +1,6 @@
 # impression
 
+[![Build Status][travis-image]][travis-url]
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
 [![MIT License][license-image]][license-url]
@@ -128,6 +129,8 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
 - [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul)
 - [Chai Assertion Library BDD](http://chaijs.com/api/bdd/)
 
+[travis-image]: https://img.shields.io/travis/vivaxy/impression.svg?style=flat-square
+[travis-url]: https://travis-ci.org/vivaxy/impression
 [npm-version-image]: http://img.shields.io/npm/v/impression.js.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/impression.js
 [npm-downloads-image]: http://img.shields.io/npm/dm/impression.js.svg?style=flat-square
