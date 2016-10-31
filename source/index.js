@@ -13,7 +13,7 @@ const EventEmitter = events.EventEmitter;
 const BEGIN = 'begin';
 const END = 'end';
 
-module.exports = class {
+module.exports = exports.default = class {
 
     constructor(options = {
         tolerance: 0,
@@ -122,14 +122,16 @@ module.exports = class {
                 const tracked = trackedElements[selector];
                 if (tracked && tracked.events) {
                     if (tracked.events.listenerCount(BEGIN) === 0 && tracked.events.listenerCount(END) === 0) {
-                        Reflect.deleteProperty(trackedElements, selector);
+                        // Reflect.deleteProperty(trackedElements, selector);
+                        delete trackedElements[selector];
                     }
                 }
             });
         } else {
             // : remove all callbacks for all selectors, all events
             Object.keys(trackedElements).forEach((selector) => {
-                Reflect.deleteProperty(trackedElements, selector);
+                // Reflect.deleteProperty(trackedElements, selector);
+                delete trackedElements[selector];
             });
         }
         return this;
@@ -180,7 +182,7 @@ module.exports = class {
                 // for removed nodes
                 previousNodes.forEach((previousItem) => {
                     if (!previousItem.marked) {
-                        if (previousItem.wasVisible) {
+                        if (previousItem.isVisible) {
                             tracked.events.emit(END, selector, previousItem.node);
                         }
                     }

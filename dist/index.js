@@ -29,7 +29,7 @@ var EventEmitter = _events2.default.EventEmitter;
 var BEGIN = 'begin';
 var END = 'end';
 
-module.exports = function () {
+module.exports = exports.default = function () {
     function _class() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
             tolerance: 0,
@@ -146,14 +146,16 @@ module.exports = function () {
                     var tracked = trackedElements[selector];
                     if (tracked && tracked.events) {
                         if (tracked.events.listenerCount(BEGIN) === 0 && tracked.events.listenerCount(END) === 0) {
-                            Reflect.deleteProperty(trackedElements, selector);
+                            // Reflect.deleteProperty(trackedElements, selector);
+                            delete trackedElements[selector];
                         }
                     }
                 });
             } else {
                 // : remove all callbacks for all selectors, all events
                 Object.keys(trackedElements).forEach(function (selector) {
-                    Reflect.deleteProperty(trackedElements, selector);
+                    // Reflect.deleteProperty(trackedElements, selector);
+                    delete trackedElements[selector];
                 });
             }
             return this;
@@ -206,7 +208,7 @@ module.exports = function () {
                     // for removed nodes
                     previousNodes.forEach(function (previousItem) {
                         if (!previousItem.marked) {
-                            if (previousItem.wasVisible) {
+                            if (previousItem.isVisible) {
                                 tracked.events.emit(END, selector, previousItem.node);
                             }
                         }

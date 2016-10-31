@@ -6,6 +6,8 @@
 const webpackConfig = require('./webpack.config');
 
 webpackConfig.devtool = 'cheap-inline-source-map';
+webpackConfig.entry = {};
+webpackConfig.output = {};
 
 module.exports = function(config) {
     config.set({
@@ -17,17 +19,12 @@ module.exports = function(config) {
             'chai',
         ],
         files: [
-            './source/index.js',
             './test/**/*.js',
         ],
         browsers: [
             'PhantomJS',
         ],
         preprocessors: {
-            './source/index.js': [
-                'webpack',
-                'sourcemap',
-            ],
             './test/**/*.js': [
                 'webpack',
                 'sourcemap',
@@ -52,8 +49,8 @@ module.exports = function(config) {
                 base: 'PhantomJS',
                 options: {
                     viewportSize: {
-                        width: 400,
-                        height: 1200,
+                        width: 200,
+                        height: 200,
                     },
                 },
             },
