@@ -11,7 +11,7 @@ describe('presets', () => {
         presets(container);
         expect(container.style.position).to.equal('relative');
         const element1 = container.querySelector('[data-impression-unique-id="1"]');
-        expect(element1.style.position).to.equal('static');
+        expect(window.getComputedStyle(element1).position).to.equal('static');
         done();
     });
 });
