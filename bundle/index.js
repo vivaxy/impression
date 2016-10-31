@@ -253,10 +253,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    tracked.nodes.push(item);
 
 	                    if (item.isVisible === true && item.wasVisible === false) {
-	                        tracked.events.emit(BEGIN, selector, currentNode);
+	                        tracked.events.emit(BEGIN, currentNode);
 	                    }
 	                    if (item.isVisible === false && item.wasVisible === true) {
-	                        tracked.events.emit(END, selector, currentNode);
+	                        tracked.events.emit(END, currentNode);
 	                    }
 	                });
 
@@ -265,7 +265,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    previousNodes.forEach(function (previousItem) {
 	                        if (!previousItem.marked) {
 	                            if (previousItem.isVisible) {
-	                                tracked.events.emit(END, selector, previousItem.node);
+	                                tracked.events.emit(END, previousItem.node);
 	                            }
 	                        }
 	                    });
