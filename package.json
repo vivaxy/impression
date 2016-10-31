@@ -7,9 +7,7 @@
     "build": "npm run build:dist && npm run build:bundle",
     "build:dist": "babel ./source --out-dir ./dist",
     "build:bundle": "webpack",
-    "test:test": "NODE_ENV=test karma start",
-    "test:local": "istanbul cover _mocha -- -R spec --require babel-register",
-    "test": "npm run test:local && codecov"
+    "test": "NODE_ENV=test karma start"
   },
   "repository": {
     "type": "git",
