@@ -7,36 +7,36 @@ import debounce from '../../source/lib/debounce';
 
 describe('debounce', () => {
     it('should execute after 100ms', (done) => {
-        let flag = false;
+        let flag = 0;
         const debouncedFunction = debounce(() => {
-            flag = true;
+            flag++;
         }, 100);
         debouncedFunction();
-        expect(flag).to.equal(false);
+        expect(flag).to.equal(0);
         expect(typeof debouncedFunction).to.equal('function');
         setTimeout(() => {
-            expect(flag).to.equal(true);
+            expect(flag).to.equal(1);
             done();
         }, 100);
     });
 
     it('should execute after 100ms', (done) => {
-        let flag = false;
+        let flag = 0;
         const debouncedFunction = debounce(() => {
-            flag = true;
+            flag = 1;
         }, 100);
         debouncedFunction();
-        expect(flag).to.equal(false);
+        expect(flag).to.equal(0);
         expect(typeof debouncedFunction).to.equal('function');
         setTimeout(() => {
             debouncedFunction();
-            expect(flag).to.equal(false);
+            expect(flag).to.equal(0);
             setTimeout(() => {
-                expect(flag).to.equal(true);
+                expect(flag).to.equal(1);
             }, 100);
         }, 50);
         setTimeout(() => {
-            expect(flag).to.equal(false);
+            expect(flag).to.equal(0);
             done();
         }, 100);
     });
