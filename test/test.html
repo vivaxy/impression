@@ -42,19 +42,37 @@
     <div class="element" data-impression-unique-id="3"></div>
     <div class="element" data-impression-unique-id="4"></div>
 </div>
-<script src="context.js"></script>
-<script type="text/javascript">
-    // Configure our Karma and set up bindings
-    %CLIENT_CONFIG%
-    window.__karma__.setupContext(window);
-
-    // All served files with the latest timestamps
-    %MAPPINGS%
-</script>
-<!-- Dynamically replaced with <script> tags -->
-%SCRIPTS%
-<script type="text/javascript">
-    window.__karma__.loaded();
+<script src="../bundle/index.js"></script>
+<script>
+    const SELECTOR4 = '[data-impression-unique-id="4"]';
+    const impression = new Impression({
+        container: document.body,
+        tolerance: 0,
+        debounce: 100,
+    });
+    let flagBegin = 0;
+    const callbackBegin = () => {
+        flagBegin++;
+        console.log('begin', flagBegin);
+    };
+    let flagEnd = 0;
+    const callbackEnd = () => {
+        flagEnd++;
+        console.log('end', flagEnd);
+    };
+    impression.on('begin', SELECTOR4, callbackBegin);
+    impression.on('end', SELECTOR4, callbackEnd);
+    const element4 = document.querySelector(SELECTOR4);
+    document.body.style.height = '400px';
+    const div = document.createElement('div');
+    const container = document.querySelector('.container');
+    div.setAttribute('data-impression-unique-id', 4);
+    div.setAttribute('class', 'element');
+    container.appendChild(div);
+    setTimeout(() => {
+        document.body.style.height = '100px';
+        container.removeChild(element4);
+    }, 200);
 </script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
 [![MIT License][license-image]][license-url]
+[![Codecov][codecov-image]][codecov-url]
 
 [![NPM][nodei-image]][nodei-url]
 
@@ -123,6 +124,9 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
 
 - [onScreen](https://github.com/silvestreh/onScreen)
 - [判断元素是否在屏幕中出现](https://vivaxyblog.github.io/2016/08/17/is-element-on-screen.html)
+- [Code Coverage of Mocha Tests using Istanbul and Karma](https://ariya.io/2013/12/code-coverage-of-mocha-tests-using-istanbul-and-karma)
+- [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul)
+- [Chai Assertion Library BDD](http://chaijs.com/api/bdd/)
 
 [npm-version-image]: http://img.shields.io/npm/v/impression.js.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/impression.js
@@ -132,3 +136,5 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
 [nodei-dl-image]: https://nodei.co/npm-dl/impression.js.png?height=3
 [nodei-url]: https://nodei.co/npm/impression.js/
 [nodei-image]: https://nodei.co/npm/impression.js.svg?downloads=true&downloadRank=true&stars=true
+[codecov-image]: https://img.shields.io/codecov/c/github/vivaxy/impression.js.svg?style=flat-square
+[codecov-url]: https://codecov.io/gh/vivaxy/impression

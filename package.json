@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npm run build:dist && npm run build:bundle",
     "build:dist": "babel ./source --out-dir ./dist",
-    "build:bundle": "webpack"
+    "build:bundle": "webpack",
+    "test": "NODE_ENV=test karma start"
   },
   "repository": {
     "type": "git",
@@ -24,13 +25,22 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-loader": "^6.2.7",
+    "babel-plugin-istanbul": "^2.0.3",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-class-properties": "^6.18.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-function-bind": "^6.8.0",
     "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
+    "chai": "^3.5.0",
+    "karma": "^1.3.0",
+    "karma-chai": "^0.1.0",
+    "karma-coverage": "^1.1.1",
+    "karma-mocha": "^1.2.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.8.0",
+    "mocha": "^3.1.2",
     "webpack": "^1.13.3"
   },
   "dependencies": {
