@@ -22,14 +22,17 @@ const webpackConfig = {
         loaders: [
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                includes: [
+                    './source/**/*.js',
+                    './test/**/*.js',
+                ],
                 loaders: [
-                    'babel'
+                    'babel',
                 ]
             },
             {
                 test: /\.json$/,
-                loader: 'json'
+                loader: 'json',
             },
         ],
     },

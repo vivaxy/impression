@@ -4,7 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>impression</title>
-    <link href="../node_modules/mocha/mocha.css" rel="stylesheet"/>
     <style>
         body {
             margin: 0;
@@ -36,17 +35,19 @@
 </head>
 <body>
 <div id="mocha"></div>
-<script src="../node_modules/mocha/mocha.js"></script>
-<script>
-    mocha.ui('bdd');
-    mocha.reporter('html');
+<script src="context.js"></script>
+<script type="text/javascript">
+    // Configure our Karma and set up bindings
+    %CLIENT_CONFIG%
+    window.__karma__.setupContext(window);
+
+    // All served files with the latest timestamps
+    %MAPPINGS%
 </script>
-<script src="./index.js"></script>
-<script>
-    if (typeof initMochaPhantomJS === 'function') {
-        initMochaPhantomJS();
-    }
-    mocha.run();
+<!-- Dynamically replaced with <script> tags -->
+%SCRIPTS%
+<script type="text/javascript">
+    window.__karma__.loaded();
 </script>
 </body>
 </html>
