@@ -31,7 +31,7 @@ module.exports = function(config) {
             './test/**/*.js': [
                 'webpack',
                 'sourcemap',
-            ]
+            ],
         },
         webpack: webpackConfig,
         singleRun: true,
@@ -46,6 +46,17 @@ module.exports = function(config) {
                     type: 'lcov',
                 },
             ],
+        },
+        customLaunchers: {
+            'PhantomJS_Desktop': {
+                base: 'PhantomJS',
+                options: {
+                    viewportSize: {
+                        width: 400,
+                        height: 1200,
+                    },
+                },
+            },
         },
     });
 };

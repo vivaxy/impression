@@ -8,12 +8,14 @@
         body {
             margin: 0;
             font-size: 0;
+            position: fixed;
+            width: 200px;
+            height: 200px;
         }
 
-        .container {
-            width: 300px;
-            height: 300px;
-            display: inline-block;
+        .element {
+            width: 200px;
+            height: 200px;
         }
 
         [data-impression-unique-id="1"] {
@@ -36,10 +38,10 @@
 <body>
 <div id="mocha"></div>
 <div class="container">
-    <div data-impression-unique-id="1"></div>
-    <div data-impression-unique-id="2"></div>
-    <div data-impression-unique-id="3"></div>
-    <div data-impression-unique-id="4"></div>
+    <div class="element" data-impression-unique-id="1"></div>
+    <div class="element" data-impression-unique-id="2"></div>
+    <div class="element" data-impression-unique-id="3"></div>
+    <div class="element" data-impression-unique-id="4"></div>
 </div>
 <script src="context.js"></script>
 <script type="text/javascript">
