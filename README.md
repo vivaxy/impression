@@ -5,10 +5,7 @@
 [![NPM Downloads][npm-downloads-image]][npm-url]
 [![MIT License][license-image]][license-url]
 [![Codecov][codecov-image]][codecov-url]
-
-[![NPM][nodei-image]][nodei-url]
-
-[![NPM][nodei-dl-image]][nodei-url]
+[![Codacy Badge][codacy-image]][codacy-url]
 
 Element [impression](https://en.wikipedia.org/wiki/Impression_(online_media)), for ads or user behaviour statistics.
 
@@ -158,11 +155,10 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element, { type }) => {
 [travis-url]: https://travis-ci.org/vivaxy/impression
 [npm-version-image]: http://img.shields.io/npm/v/impression.js.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/impression.js
-[npm-downloads-image]: http://img.shields.io/npm/dm/impression.js.svg?style=flat-square
-[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[npm-downloads-image]: https://img.shields.io/npm/dt/impression.js.svg?style=flat-square
+[license-image]: https://img.shields.io/npm/l/impression.js.svg?style=flat-square
 [license-url]: LICENSE
-[nodei-dl-image]: https://nodei.co/npm-dl/impression.js.png?height=3
-[nodei-url]: https://nodei.co/npm/impression.js/
-[nodei-image]: https://nodei.co/npm/impression.js.svg?downloads=true&downloadRank=true&stars=true
 [codecov-image]: https://img.shields.io/codecov/c/github/vivaxy/impression.svg?style=flat-square
 [codecov-url]: https://codecov.io/gh/vivaxy/impression
+[codacy-image]: https://api.codacy.com/project/badge/Grade/d7b573db992a43acae3c7ef06c2cd312
+[codacy-url]: https://www.codacy.com/app/vivaxy2012/impression?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vivaxy/impression&amp;utm_campaign=Badge_Grade
