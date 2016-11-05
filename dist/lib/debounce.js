@@ -13,8 +13,14 @@ exports.default = function (callback, timeout) {
     var timer = void 0;
 
     return function () {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
         clearTimeout(timer);
 
-        timer = setTimeout(callback, timeout);
+        timer = setTimeout(function () {
+            callback.apply(undefined, args);
+        }, timeout);
     };
 };

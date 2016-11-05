@@ -83,6 +83,22 @@ Only accepts a single element.
 
 `impression.detach()`
 
+### `onObservers` => `impression`
+
+`impression.onObservers(type, callback)`
+
+### `onceObservers` => `impression`
+
+`impression.onceObservers(type, callback)`
+
+### `offObservers` => `impression`
+
+`impression.offObservers(type, callback)`
+
+`impression.offObservers(type)`
+
+`impression.offObservers()`
+
 ## Options
 
 ### tolerance
@@ -108,18 +124,27 @@ default `window`
 ### begin
 
 ```js
-impression.on('begin', '[data-impression-uniqueid="1"]', (element) => {
+impression.on('begin', '[data-impression-uniqueid="1"]', (element, { type }) => {
     // => which element begins to impression
+    // => the cause of the change
 });
 ```
 
 ### end
 
 ```js
-impression.on('end', '[data-impression-uniqueid="1"]', (element) => {
+impression.on('end', '[data-impression-uniqueid="1"]', (element, { type }) => {
     // => which element's impression ends
+    // => the cause of the change
 });
 ```
+
+## Types
+
+- mutation
+- resize
+- scroll
+- unload
 
 ## Reference
 

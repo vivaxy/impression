@@ -4,27 +4,32 @@
  */
 
 import presets from '../lib/presets';
+import * as observers from '../configs/observers';
 
 const SCROLL = 'scroll';
 
 export default (container) => {
     let attached = false;
+    let _callback;
 
     const on = (callback) => {
         if (attached) {
             return false;
         } else {
             attached = true;
+            _callback = () => {
+                return callback(observers.SCROLL);
+            };
             presets(container);
-            container.addEventListener(SCROLL, callback);
+            container.addEventListener(SCROLL, _callback);
 
             return true;
         }
     };
 
-    const off = (callback) => {
+    const off = () => {
         if (attached) {
-            container.removeEventListener(SCROLL, callback);
+            container.removeEventListener(SCROLL, _callback);
             attached = false;
             return true;
         } else {

@@ -6,23 +6,27 @@
 import mutationEvents from '../observers/mutation';
 import resizeEvents from '../observers/resize';
 import scrollEvents from '../observers/scroll';
+import unloadEvents from '../observers/unload';
 
 export default (container) => {
     let mutationListener = mutationEvents(document.body);
     let resizeListener = resizeEvents(container);
     let scrollListener = scrollEvents(container);
+    let unloadListener = unloadEvents();
 
     const on = (callback) => {
         mutationListener.on(callback);
         resizeListener.on(callback);
         scrollListener.on(callback);
+        unloadListener.on(callback);
         return true;
     };
 
-    const off = (callback) => {
-        mutationListener.off(callback);
-        resizeListener.off(callback);
-        scrollListener.off(callback);
+    const off = () => {
+        mutationListener.off();
+        resizeListener.off();
+        scrollListener.off();
+        unloadListener.off();
         return true;
     };
 

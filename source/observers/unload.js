@@ -1,14 +1,13 @@
 /**
- * @since 2016-10-30 14:24
+ * @since 2016-11-05 09:32
  * @author vivaxy
  */
 
-import presets from '../lib/presets';
 import * as observers from '../configs/observers';
 
-const RESIZE = 'resize';
+const BEFORE_UNLOAD = 'beforeunload';
 
-export default (container) => {
+export default () => {
     let attached = false;
     let _callback;
 
@@ -18,17 +17,16 @@ export default (container) => {
         } else {
             attached = true;
             _callback = () => {
-                return callback(observers.RESIZE);
+                return callback(observers.UNLOAD)
             };
-            presets(container);
-            container.addEventListener(RESIZE, _callback);
+            window.addEventListener(BEFORE_UNLOAD, _callback);
             return true;
         }
     };
 
     const off = () => {
         if (attached) {
-            container.removeEventListener(RESIZE, _callback);
+            window.removeEventListener(BEFORE_UNLOAD, _callback);
             attached = false;
             return true;
         } else {

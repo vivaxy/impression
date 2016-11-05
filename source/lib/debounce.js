@@ -6,9 +6,11 @@
 export default (callback, timeout) => {
     let timer;
 
-    return () => {
+    return (...args) => {
         clearTimeout(timer);
 
-        timer = setTimeout(callback, timeout);
+        timer = setTimeout(() => {
+            callback(...args);
+        }, timeout);
     };
 };
