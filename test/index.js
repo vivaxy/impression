@@ -3,6 +3,7 @@
  * @author vivaxy
  */
 
+import * as eventTypes from '../source/configs/events';
 import Impression from '../source/index';
 
 describe('Impression', () => {
@@ -28,7 +29,7 @@ describe('Impression', () => {
         const callback = () => {
             flag++;
         };
-        impression.on('begin', SELECTOR4, callback);
+        impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         impression.detach();
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
@@ -53,7 +54,7 @@ describe('Impression', () => {
         const callback = () => {
             flag++;
         };
-        impression.once('begin', SELECTOR4, callback);
+        impression.once(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
         expect(flag).to.equal(0);
@@ -85,7 +86,7 @@ describe('Impression', () => {
         const callback = () => {
             flag++;
         };
-        impression.on('begin', SELECTOR4, callback);
+        impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
         expect(flag).to.equal(0);
@@ -96,7 +97,7 @@ describe('Impression', () => {
         setTimeout(() => {
             expect(flag).to.equal(1);
             document.body.style.height = '100px';
-            impression.off('begin', SELECTOR4, callback);
+            impression.off(eventTypes.BEGIN, SELECTOR4, callback);
             const div = document.createElement('div');
             document.body.appendChild(div);
             document.body.removeChild(div);
@@ -118,7 +119,7 @@ describe('Impression', () => {
         const callback = () => {
             flag++;
         };
-        impression.on('begin', SELECTOR4, callback);
+        impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
         expect(flag).to.equal(0);
@@ -129,7 +130,7 @@ describe('Impression', () => {
         setTimeout(() => {
             expect(flag).to.equal(1);
             document.body.style.height = '100px';
-            impression.off('begin', SELECTOR4);
+            impression.off(eventTypes.BEGIN, SELECTOR4);
             const div = document.createElement('div');
             document.body.appendChild(div);
             document.body.removeChild(div);
@@ -151,7 +152,7 @@ describe('Impression', () => {
         const callback = () => {
             flag++;
         };
-        impression.on('begin', SELECTOR4, callback);
+        impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
         expect(flag).to.equal(0);
@@ -162,7 +163,7 @@ describe('Impression', () => {
         setTimeout(() => {
             expect(flag).to.equal(1);
             document.body.style.height = '100px';
-            impression.off('begin');
+            impression.off(eventTypes.BEGIN);
             const div = document.createElement('div');
             document.body.appendChild(div);
             document.body.removeChild(div);
@@ -184,7 +185,7 @@ describe('Impression', () => {
         const callback = () => {
             flag++;
         };
-        impression.on('begin', SELECTOR4, callback);
+        impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
         expect(flag).to.equal(0);
@@ -221,8 +222,8 @@ describe('Impression', () => {
         const callbackEnd = () => {
             flagEnd++;
         };
-        impression.on('begin', SELECTOR4, callbackBegin);
-        impression.on('end', SELECTOR4, callbackEnd);
+        impression.on(eventTypes.BEGIN, SELECTOR4, callbackBegin);
+        impression.on(eventTypes.END, SELECTOR4, callbackEnd);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
         expect(flagBegin).to.equal(0);

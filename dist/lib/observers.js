@@ -16,24 +16,36 @@ var _scroll = require('../observers/scroll');
 
 var _scroll2 = _interopRequireDefault(_scroll);
 
+var _unload = require('../observers/unload');
+
+var _unload2 = _interopRequireDefault(_unload);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @since 2016-10-30 15:12
+ * @author vivaxy
+ */
 
 exports.default = function (container) {
     var mutationListener = (0, _mutation2.default)(document.body);
     var resizeListener = (0, _resize2.default)(container);
     var scrollListener = (0, _scroll2.default)(container);
+    var unloadListener = (0, _unload2.default)();
 
     var on = function on(callback) {
         mutationListener.on(callback);
         resizeListener.on(callback);
         scrollListener.on(callback);
+        unloadListener.on(callback);
         return true;
     };
 
-    var off = function off(callback) {
-        mutationListener.off(callback);
-        resizeListener.off(callback);
-        scrollListener.off(callback);
+    var off = function off() {
+        mutationListener.off();
+        resizeListener.off();
+        scrollListener.off();
+        unloadListener.off();
         return true;
     };
 
@@ -41,7 +53,4 @@ exports.default = function (container) {
         on: on,
         off: off
     };
-}; /**
-    * @since 2016-10-30 15:12
-    * @author vivaxy
-    */
+};

@@ -73,17 +73,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _observers2 = _interopRequireDefault(_observers);
 
-	var _debounce = __webpack_require__(12);
+	var _debounce = __webpack_require__(14);
 
 	var _debounce2 = _interopRequireDefault(_debounce);
+
+	var _diffTrackedElements = __webpack_require__(15);
+
+	var _diffTrackedElements2 = _interopRequireDefault(_diffTrackedElements);
+
+	var _endTrackedElements = __webpack_require__(17);
+
+	var _endTrackedElements2 = _interopRequireDefault(_endTrackedElements);
+
+	var _observers3 = __webpack_require__(10);
+
+	var observerTypes = _interopRequireWildcard(_observers3);
+
+	var _events3 = __webpack_require__(16);
+
+	var eventTypes = _interopRequireWildcard(_events3);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var EventEmitter = _events2.default.EventEmitter;
-	var BEGIN = 'begin';
-	var END = 'end';
 
 	module.exports = exports.default = function () {
 	    function _class() {
@@ -99,7 +115,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            debounce = options.debounce,
 	            container = options.container;
 
-	        // todo validate options
 
 	        this._attached = false;
 	        this._trackedElements = {};
@@ -126,7 +141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'detach',
 	        value: function detach() {
 	            if (this._attached) {
-	                this._observers.off(this._handler);
+	                this._observers.off();
 	                this._attached = false;
 	            }
 	            return this;
@@ -137,24 +152,82 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return (0, _validators2.default)(element, this._container, this._tolerance);
 	        }
 	    }, {
-	        key: 'once',
-	        value: function once(event, selector, callback) {
-	            if (!this._trackedElements[selector]) {
-	                this._trackedElements[selector] = {};
+	        key: 'on',
+	        value: function on(event, selector, callback) {
+	            if (this._isViewableChangeEvent(event)) {
+	                this._onViewableChange(event, selector, callback);
+	            } else {
+	                throw new Error('impression: event not accepted: ' + event);
 	            }
-	            var tracked = this._trackedElements[selector];
-	            if (!tracked.nodes) {
-	                tracked.nodes = [];
-	            }
-	            if (!tracked.events) {
-	                tracked.events = new EventEmitter();
-	            }
-	            tracked.events.once(event, callback);
 	            return this;
 	        }
 	    }, {
-	        key: 'on',
-	        value: function on(event, selector, callback) {
+	        key: 'once',
+	        value: function once(event, selector, callback) {
+	            if (this._isViewableChangeEvent(event)) {
+	                this._onceViewableChange(event, selector, callback);
+	            } else {
+	                throw new Error('impression: event not accepted: ' + event);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'off',
+	        value: function off(event, selector, callback) {
+	            this._offViewableChange(event, selector, callback);
+	            return this;
+	        }
+	    }, {
+	        key: 'onObservers',
+	        value: function onObservers(event, callback) {
+	            if (this._isObserverEvent(event)) {
+	                this._events.on(event, callback);
+	            } else {
+	                throw new Error('impression: event not accepted: ' + event);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'onceObservers',
+	        value: function onceObservers(event, callback) {
+	            if (this._isObserverEvent(event)) {
+	                this._events.once(event, callback);
+	            } else {
+	                throw new Error('impression: event not accepted: ' + event);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'offObservers',
+	        value: function offObservers(event, callback) {
+	            if (event) {
+	                if (callback) {
+	                    this._events.removeListener(event, callback);
+	                } else {
+	                    this._events.removeAllListeners(event);
+	                }
+	            } else {
+	                this._events.removeAllListeners();
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: '_handlers',
+	        value: function _handlers(type) {
+
+	            this._events.emit(type);
+
+	            var trackedElements = this._trackedElements;
+	            if (type === observerTypes.UNLOAD) {
+	                (0, _endTrackedElements2.default)(trackedElements, type);
+	            } else {
+	                (0, _diffTrackedElements2.default)(trackedElements, type, this.isViewable.bind(this));
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: '_onViewableChange',
+	        value: function _onViewableChange(event, selector, callback) {
 	            if (!this._trackedElements[selector]) {
 	                this._trackedElements[selector] = {};
 	            }
@@ -169,110 +242,108 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this;
 	        }
 	    }, {
-	        key: 'off',
-	        value: function off(event, selector, callback) {
-	            var trackedElements = this._trackedElements;
-
+	        key: '_onceViewableChange',
+	        value: function _onceViewableChange(event, selector, callback) {
+	            if (!this._trackedElements[selector]) {
+	                this._trackedElements[selector] = {};
+	            }
+	            var tracked = this._trackedElements[selector];
+	            if (!tracked.nodes) {
+	                tracked.nodes = [];
+	            }
+	            if (!tracked.events) {
+	                tracked.events = new EventEmitter();
+	            }
+	            tracked.events.once(event, callback);
+	            return this;
+	        }
+	    }, {
+	        key: '_offViewableChange',
+	        value: function _offViewableChange(event, selector, callback) {
 	            if (event) {
 	                if (selector) {
-	                    if (callback) {
-	                        // event, selector, callback: remove single callback for this selector, this event
-	                        var tracked = trackedElements[selector];
-	                        if (tracked && tracked.events) {
-	                            tracked.events.removeListener(event, callback);
-	                        }
-	                    } else {
-	                        // event, selector: remove all callbacks for this selector, this event
-	                        var _tracked = trackedElements[selector];
-	                        if (_tracked && _tracked.events) {
-	                            _tracked.events.removeAllListeners(event);
-	                        }
-	                    }
+	                    this._offViewableChangeBySelector(event, selector, callback);
 	                } else {
-	                    // event: remove all callbacks for all selectors, this event
-	                    Object.keys(trackedElements).forEach(function (selector) {
-	                        var tracked = trackedElements[selector];
-	                        if (tracked && tracked.events) {
-	                            tracked.events.removeAllListeners(event);
-	                        }
-	                    });
+	                    this._offViewableChangeByEvent(event);
 	                }
-	                // clean up useless tracked
-	                Object.keys(trackedElements).forEach(function (selector) {
-	                    var tracked = trackedElements[selector];
-	                    if (tracked && tracked.events) {
-	                        if (tracked.events.listenerCount(BEGIN) === 0 && tracked.events.listenerCount(END) === 0) {
-	                            // Reflect.deleteProperty(trackedElements, selector);
-	                            delete trackedElements[selector];
-	                        }
-	                    }
-	                });
+	                this._cleanUpTracked();
 	            } else {
-	                // : remove all callbacks for all selectors, all events
-	                Object.keys(trackedElements).forEach(function (selector) {
-	                    // Reflect.deleteProperty(trackedElements, selector);
-	                    delete trackedElements[selector];
-	                });
+	                this._offViewableChangeAll();
 	            }
 	            return this;
 	        }
 	    }, {
-	        key: '_handlers',
-	        value: function _handlers() {
-	            var _this = this;
-
+	        key: '_offViewableChangeBySelector',
+	        value: function _offViewableChangeBySelector(event, selector, callback) {
 	            var trackedElements = this._trackedElements;
-	            var selectors = Object.keys(trackedElements);
-
-	            selectors.forEach(function (selector) {
+	            if (callback) {
+	                // event, selector, callback: remove single callback for this selector, this event
 	                var tracked = trackedElements[selector];
-	                var previousNodes = tracked.nodes;
-
-	                tracked.nodes = [];
-
-	                var currentNodes = document.querySelectorAll(selector);
-
-	                Array.prototype.forEach.call(currentNodes, function (currentNode) {
-	                    var wasVisible = false;
-	                    if (previousNodes) {
-	                        previousNodes.forEach(function (previousItem) {
-	                            var previousNode = previousItem.node;
-	                            if (!previousItem.marked && previousNode === currentNode) {
-	                                wasVisible = previousItem.isVisible;
-	                                previousItem.marked = true;
-	                            }
-	                        });
-	                    }
-
-	                    var item = {
-	                        isVisible: _this.isViewable(currentNode),
-	                        wasVisible: wasVisible,
-	                        node: currentNode
-	                    };
-
-	                    tracked.nodes.push(item);
-
-	                    if (item.isVisible === true && item.wasVisible === false) {
-	                        tracked.events.emit(BEGIN, currentNode);
-	                    }
-	                    if (item.isVisible === false && item.wasVisible === true) {
-	                        tracked.events.emit(END, currentNode);
-	                    }
-	                });
-
-	                if (previousNodes) {
-	                    // for removed nodes
-	                    previousNodes.forEach(function (previousItem) {
-	                        if (!previousItem.marked) {
-	                            if (previousItem.isVisible) {
-	                                tracked.events.emit(END, previousItem.node);
-	                            }
-	                        }
-	                    });
+	                if (tracked && tracked.events) {
+	                    tracked.events.removeListener(event, callback);
+	                }
+	            } else {
+	                // event, selector: remove all callbacks for this selector, this event
+	                var _tracked = trackedElements[selector];
+	                if (_tracked && _tracked.events) {
+	                    _tracked.events.removeAllListeners(event);
+	                }
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: '_offViewableChangeByEvent',
+	        value: function _offViewableChangeByEvent(event) {
+	            var trackedElements = this._trackedElements;
+	            // event: remove all callbacks for all selectors, this event
+	            Object.keys(trackedElements).forEach(function (selector) {
+	                var tracked = trackedElements[selector];
+	                if (tracked && tracked.events) {
+	                    tracked.events.removeAllListeners(event);
 	                }
 	            });
-
 	            return this;
+	        }
+	    }, {
+	        key: '_offViewableChangeAll',
+	        value: function _offViewableChangeAll() {
+	            var trackedElements = this._trackedElements;
+	            // : remove all callbacks for all selectors, all events
+	            Object.keys(trackedElements).forEach(function (selector) {
+	                // Reflect.deleteProperty(trackedElements, selector);
+	                delete trackedElements[selector];
+	            });
+	            return this;
+	        }
+	    }, {
+	        key: '_cleanUpTracked',
+	        value: function _cleanUpTracked() {
+	            var trackedElements = this._trackedElements;
+	            // clean up useless tracked
+	            Object.keys(trackedElements).forEach(function (selector) {
+	                var tracked = trackedElements[selector];
+	                if (tracked && tracked.events) {
+	                    if (tracked.events.listenerCount(eventTypes.BEGIN) === 0 && tracked.events.listenerCount(eventTypes.END) === 0) {
+	                        // Reflect.deleteProperty(trackedElements, selector);
+	                        delete trackedElements[selector];
+	                    }
+	                }
+	            });
+	            return this;
+	        }
+	    }, {
+	        key: '_isViewableChangeEvent',
+	        value: function _isViewableChangeEvent(event) {
+	            return Object.keys(eventTypes).some(function (constant) {
+	                return eventTypes[constant] === event;
+	            });
+	        }
+	    }, {
+	        key: '_isObserverEvent',
+	        value: function _isObserverEvent(event) {
+	            return Object.keys(observerTypes).some(function (constant) {
+	                return eventTypes[constant] === event;
+	            });
 	        }
 	    }]);
 
@@ -754,32 +825,44 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mutation2 = _interopRequireDefault(_mutation);
 
-	var _resize = __webpack_require__(10);
+	var _resize = __webpack_require__(11);
 
 	var _resize2 = _interopRequireDefault(_resize);
 
-	var _scroll = __webpack_require__(11);
+	var _scroll = __webpack_require__(12);
 
 	var _scroll2 = _interopRequireDefault(_scroll);
 
+	var _unload = __webpack_require__(13);
+
+	var _unload2 = _interopRequireDefault(_unload);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * @since 2016-10-30 15:12
+	 * @author vivaxy
+	 */
 
 	exports.default = function (container) {
 	    var mutationListener = (0, _mutation2.default)(document.body);
 	    var resizeListener = (0, _resize2.default)(container);
 	    var scrollListener = (0, _scroll2.default)(container);
+	    var unloadListener = (0, _unload2.default)();
 
 	    var on = function on(callback) {
 	        mutationListener.on(callback);
 	        resizeListener.on(callback);
 	        scrollListener.on(callback);
+	        unloadListener.on(callback);
 	        return true;
 	    };
 
-	    var off = function off(callback) {
-	        mutationListener.off(callback);
-	        resizeListener.off(callback);
-	        scrollListener.off(callback);
+	    var off = function off() {
+	        mutationListener.off();
+	        resizeListener.off();
+	        scrollListener.off();
+	        unloadListener.off();
 	        return true;
 	    };
 
@@ -787,10 +870,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        on: on,
 	        off: off
 	    };
-	}; /**
-	    * @since 2016-10-30 15:12
-	    * @author vivaxy
-	    */
+	};
 
 /***/ },
 /* 8 */
@@ -806,13 +886,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _presets2 = _interopRequireDefault(_presets);
 
+	var _observers = __webpack_require__(10);
+
+	var observers = _interopRequireWildcard(_observers);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var DOM_NODE_INSERTED = 'DOMNodeInserted'; /**
-	                                            * @since 2016-10-30 14:24
-	                                            * @author vivaxy
-	                                            */
+	/**
+	 * @since 2016-10-30 14:24
+	 * @author vivaxy
+	 */
 
+	var DOM_NODE_INSERTED = 'DOMNodeInserted';
 	var DOM_NODE_REMOVED = 'DOMNodeRemoved';
 	var DOM_ATTR_MODIFIED = 'DOMAttrModified';
 	var DOM_SUBTREE_MODIFIED = 'DOMSubtreeModified';
@@ -820,40 +907,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = function (container) {
 	    var attached = void 0;
 	    var mutationObserver = void 0;
+	    var _callback = void 0;
 
 	    var on = function on(callback) {
 	        if (attached) {
 	            return false;
 	        } else {
 	            attached = true;
+	            _callback = function _callback() {
+	                return callback(observers.MUTATION);
+	            };
 	            (0, _presets2.default)(container);
 	            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 	            if (MutationObserver) {
-	                mutationObserver = new MutationObserver(callback);
+	                mutationObserver = new MutationObserver(_callback);
 	                mutationObserver.observe(container, {
 	                    childList: true,
 	                    attributes: true,
 	                    subtree: true
 	                });
 	            } else {
-	                container.addEventListener(DOM_NODE_INSERTED, callback);
-	                container.addEventListener(DOM_NODE_REMOVED, callback);
-	                container.addEventListener(DOM_ATTR_MODIFIED, callback);
-	                container.addEventListener(DOM_SUBTREE_MODIFIED, callback);
+	                container.addEventListener(DOM_NODE_INSERTED, _callback);
+	                container.addEventListener(DOM_NODE_REMOVED, _callback);
+	                container.addEventListener(DOM_ATTR_MODIFIED, _callback);
+	                container.addEventListener(DOM_SUBTREE_MODIFIED, _callback);
 	            }
 	            return true;
 	        }
 	    };
 
-	    var off = function off(callback) {
+	    var off = function off() {
 	        if (attached) {
 	            if (mutationObserver) {
 	                mutationObserver.disconnect();
 	            } else {
-	                container.removeEventListener(DOM_NODE_INSERTED, callback);
-	                container.removeEventListener(DOM_NODE_REMOVED, callback);
-	                container.removeEventListener(DOM_ATTR_MODIFIED, callback);
-	                container.removeEventListener(DOM_SUBTREE_MODIFIED, callback);
+	                container.removeEventListener(DOM_NODE_INSERTED, _callback);
+	                container.removeEventListener(DOM_NODE_REMOVED, _callback);
+	                container.removeEventListener(DOM_ATTR_MODIFIED, _callback);
+	                container.removeEventListener(DOM_SUBTREE_MODIFIED, _callback);
 	            }
 	            attached = false;
 	            return true;
@@ -898,54 +989,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 10 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
+	/**
+	 * @since 2016-11-05 09:37
+	 * @author vivaxy
+	 */
 
-	var _presets = __webpack_require__(9);
-
-	var _presets2 = _interopRequireDefault(_presets);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var RESIZE = 'resize'; /**
-	                        * @since 2016-10-30 14:24
-	                        * @author vivaxy
-	                        */
-
-	exports.default = function (container) {
-	    var attached = false;
-
-	    var on = function on(callback) {
-	        if (attached) {
-	            return false;
-	        } else {
-	            attached = true;
-	            (0, _presets2.default)(container);
-	            container.addEventListener(RESIZE, callback);
-	            return true;
-	        }
-	    };
-
-	    var off = function off(callback) {
-	        if (attached) {
-	            container.removeEventListener(RESIZE, callback);
-	            attached = false;
-	            return true;
-	        } else {
-	            return false;
-	        }
-	    };
-
-	    return {
-	        on: on,
-	        off: off
-	    };
-	};
+	var MUTATION = exports.MUTATION = 'mutation';
+	var RESIZE = exports.RESIZE = 'resize';
+	var SCROLL = exports.SCROLL = 'scroll';
+	var UNLOAD = exports.UNLOAD = 'unload';
 
 /***/ },
 /* 11 */
@@ -961,31 +1020,42 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _presets2 = _interopRequireDefault(_presets);
 
+	var _observers = __webpack_require__(10);
+
+	var observers = _interopRequireWildcard(_observers);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var SCROLL = 'scroll'; /**
-	                        * @since 2016-10-30 14:17
-	                        * @author vivaxy
-	                        */
+	/**
+	 * @since 2016-10-30 14:24
+	 * @author vivaxy
+	 */
+
+	var RESIZE = 'resize';
 
 	exports.default = function (container) {
 	    var attached = false;
+	    var _callback = void 0;
 
 	    var on = function on(callback) {
 	        if (attached) {
 	            return false;
 	        } else {
 	            attached = true;
+	            _callback = function _callback() {
+	                return callback(observers.RESIZE);
+	            };
 	            (0, _presets2.default)(container);
-	            container.addEventListener(SCROLL, callback);
-
+	            container.addEventListener(RESIZE, _callback);
 	            return true;
 	        }
 	    };
 
-	    var off = function off(callback) {
+	    var off = function off() {
 	        if (attached) {
-	            container.removeEventListener(SCROLL, callback);
+	            container.removeEventListener(RESIZE, _callback);
 	            attached = false;
 	            return true;
 	        } else {
@@ -1001,6 +1071,124 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _presets = __webpack_require__(9);
+
+	var _presets2 = _interopRequireDefault(_presets);
+
+	var _observers = __webpack_require__(10);
+
+	var observers = _interopRequireWildcard(_observers);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * @since 2016-10-30 14:17
+	 * @author vivaxy
+	 */
+
+	var SCROLL = 'scroll';
+
+	exports.default = function (container) {
+	    var attached = false;
+	    var _callback = void 0;
+
+	    var on = function on(callback) {
+	        if (attached) {
+	            return false;
+	        } else {
+	            attached = true;
+	            _callback = function _callback() {
+	                return callback(observers.SCROLL);
+	            };
+	            (0, _presets2.default)(container);
+	            container.addEventListener(SCROLL, _callback);
+
+	            return true;
+	        }
+	    };
+
+	    var off = function off() {
+	        if (attached) {
+	            container.removeEventListener(SCROLL, _callback);
+	            attached = false;
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    };
+
+	    return {
+	        on: on,
+	        off: off
+	    };
+	};
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _observers = __webpack_require__(10);
+
+	var observers = _interopRequireWildcard(_observers);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var BEFORE_UNLOAD = 'beforeunload'; /**
+	                                     * @since 2016-11-05 09:32
+	                                     * @author vivaxy
+	                                     */
+
+	exports.default = function () {
+	    var attached = false;
+	    var _callback = void 0;
+
+	    var on = function on(callback) {
+	        if (attached) {
+	            return false;
+	        } else {
+	            attached = true;
+	            _callback = function _callback() {
+	                return callback(observers.UNLOAD);
+	            };
+	            window.addEventListener(BEFORE_UNLOAD, _callback);
+	            return true;
+	        }
+	    };
+
+	    var off = function off() {
+	        if (attached) {
+	            window.removeEventListener(BEFORE_UNLOAD, _callback);
+	            attached = false;
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    };
+
+	    return {
+	        on: on,
+	        off: off
+	    };
+	};
+
+/***/ },
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1018,10 +1206,154 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var timer = void 0;
 
 	    return function () {
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
 	        clearTimeout(timer);
 
-	        timer = setTimeout(callback, timeout);
+	        timer = setTimeout(function () {
+	            callback.apply(undefined, args);
+	        }, timeout);
 	    };
+	};
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _events = __webpack_require__(16);
+
+	var eventTypes = _interopRequireWildcard(_events);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var diffBySelector = function diffBySelector(selector, tracked, isViewable, type) {
+	    var previousNodes = tracked.nodes;
+
+	    tracked.nodes = [];
+
+	    var currentNodes = document.querySelectorAll(selector);
+
+	    Array.prototype.forEach.call(currentNodes, function (currentNode) {
+	        var wasVisible = false;
+	        if (previousNodes) {
+	            previousNodes.forEach(function (previousItem) {
+	                var previousNode = previousItem.node;
+	                if (!previousItem.marked && previousNode === currentNode) {
+	                    wasVisible = previousItem.isVisible;
+	                    previousItem.marked = true;
+	                }
+	            });
+	        }
+
+	        var item = {
+	            isVisible: isViewable(currentNode),
+	            wasVisible: wasVisible,
+	            node: currentNode
+	        };
+
+	        tracked.nodes.push(item);
+
+	        if (item.isVisible === true && item.wasVisible === false) {
+	            tracked.events.emit(eventTypes.BEGIN, currentNode, {
+	                type: type
+	            });
+	        }
+	        if (item.isVisible === false && item.wasVisible === true) {
+	            tracked.events.emit(eventTypes.END, currentNode, {
+	                type: type
+	            });
+	        }
+	    });
+
+	    if (previousNodes) {
+	        // for removed nodes
+	        previousNodes.forEach(function (previousItem) {
+	            if (!previousItem.marked) {
+	                if (previousItem.isVisible) {
+	                    tracked.events.emit(eventTypes.END, previousItem.node, {
+	                        type: type
+	                    });
+	                }
+	            }
+	        });
+	    }
+	}; /**
+	    * @since 2016-11-05 10:01
+	    * @author vivaxy
+	    */
+
+	exports.default = function (trackedElements, type, isViewable) {
+	    var selectors = Object.keys(trackedElements);
+	    selectors.forEach(function (selector) {
+	        var tracked = trackedElements[selector];
+	        diffBySelector(selector, tracked, isViewable, type);
+	    });
+	};
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 * @since 2016-11-05 10:13
+	 * @author vivaxy
+	 */
+
+	var BEGIN = exports.BEGIN = 'begin';
+	var END = exports.END = 'end';
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _events = __webpack_require__(16);
+
+	var eventTypes = _interopRequireWildcard(_events);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var endBySelector = function endBySelector(selector, tracked, type) {
+	    var previousNodes = tracked.nodes;
+	    if (previousNodes) {
+	        previousNodes.forEach(function (previousItem) {
+	            var previousNode = previousItem.node;
+	            if (previousNode.isVisible) {
+	                tracked.events.emit(eventTypes.END, previousItem.node, {
+	                    type: type
+	                });
+	            }
+	        });
+	    }
+	}; /**
+	    * @since 2016-11-05 10:06
+	    * @author vivaxy
+	    */
+
+	exports.default = function (trackedElements, type) {
+	    var selectors = Object.keys(trackedElements);
+	    selectors.forEach(function (selector) {
+	        var tracked = trackedElements[selector];
+	        endBySelector(selector, tracked);
+	    });
 	};
 
 /***/ }

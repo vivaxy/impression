@@ -8,10 +8,13 @@ import events from 'events';
 import validators from './lib/validators';
 import getObservers from './lib/observers';
 import debounceCallback from './lib/debounce';
+import diffTrackedElements from './lib/diffTrackedElements';
+import endTrackedElements from './lib/endTrackedElements';
+
+import * as observerTypes from './configs/observers';
+import * as eventTypes from './configs/events';
 
 const EventEmitter = events.EventEmitter;
-const BEGIN = 'begin';
-const END = 'end';
 
 module.exports = exports.default = class {
 
@@ -25,8 +28,6 @@ module.exports = exports.default = class {
             debounce,
             container,
         } = options;
-
-        // todo validate options
 
         this._attached = false;
         this._trackedElements = {};
@@ -50,7 +51,7 @@ module.exports = exports.default = class {
 
     detach() {
         if (this._attached) {
-            this._observers.off(this._handler);
+            this._observers.off();
             this._attached = false;
         }
         return this;
@@ -60,22 +61,74 @@ module.exports = exports.default = class {
         return validators(element, this._container, this._tolerance);
     }
 
-    once(event, selector, callback) {
-        if (!this._trackedElements[selector]) {
-            this._trackedElements[selector] = {};
+    on(event, selector, callback) {
+        if (this._isViewableChangeEvent(event)) {
+            this._onViewableChange(event, selector, callback);
+        } else {
+            throw new Error(`impression: event not accepted: ${event}`);
         }
-        const tracked = this._trackedElements[selector];
-        if (!tracked.nodes) {
-            tracked.nodes = [];
-        }
-        if (!tracked.events) {
-            tracked.events = new EventEmitter();
-        }
-        tracked.events.once(event, callback);
         return this;
     }
 
-    on(event, selector, callback) {
+    once(event, selector, callback) {
+        if (this._isViewableChangeEvent(event)) {
+            this._onceViewableChange(event, selector, callback);
+        } else {
+            throw new Error(`impression: event not accepted: ${event}`);
+        }
+        return this;
+    }
+
+    off(event, selector, callback) {
+        this._offViewableChange(event, selector, callback);
+        return this;
+    }
+
+    onObservers(event, callback) {
+        if (this._isObserverEvent(event)) {
+            this._events.on(event, callback);
+        } else {
+            throw new Error(`impression: event not accepted: ${event}`);
+        }
+        return this;
+    }
+
+    onceObservers(event, callback) {
+        if (this._isObserverEvent(event)) {
+            this._events.once(event, callback);
+        } else {
+            throw new Error(`impression: event not accepted: ${event}`);
+        }
+        return this;
+    }
+
+    offObservers(event, callback) {
+        if (event) {
+            if (callback) {
+                this._events.removeListener(event, callback);
+            } else {
+                this._events.removeAllListeners(event);
+            }
+        } else {
+            this._events.removeAllListeners();
+        }
+        return this;
+    }
+
+    _handlers(type) {
+
+        this._events.emit(type);
+
+        const trackedElements = this._trackedElements;
+        if (type === observerTypes.UNLOAD) {
+            endTrackedElements(trackedElements, type);
+        } else {
+            diffTrackedElements(trackedElements, type, ::this.isViewable);
+        }
+        return this;
+    }
+
+    _onViewableChange(event, selector, callback) {
         if (!this._trackedElements[selector]) {
             this._trackedElements[selector] = {};
         }
@@ -90,107 +143,100 @@ module.exports = exports.default = class {
         return this;
     }
 
-    off(event, selector, callback) {
-        const trackedElements = this._trackedElements;
+    _onceViewableChange(event, selector, callback) {
+        if (!this._trackedElements[selector]) {
+            this._trackedElements[selector] = {};
+        }
+        const tracked = this._trackedElements[selector];
+        if (!tracked.nodes) {
+            tracked.nodes = [];
+        }
+        if (!tracked.events) {
+            tracked.events = new EventEmitter();
+        }
+        tracked.events.once(event, callback);
+        return this;
+    }
 
+    _offViewableChange(event, selector, callback) {
         if (event) {
             if (selector) {
-                if (callback) {
-                    // event, selector, callback: remove single callback for this selector, this event
-                    const tracked = trackedElements[selector];
-                    if (tracked && tracked.events) {
-                        tracked.events.removeListener(event, callback);
-                    }
-                } else {
-                    // event, selector: remove all callbacks for this selector, this event
-                    const tracked = trackedElements[selector];
-                    if (tracked && tracked.events) {
-                        tracked.events.removeAllListeners(event);
-                    }
-                }
+                this._offViewableChangeBySelector(event, selector, callback);
             } else {
-                // event: remove all callbacks for all selectors, this event
-                Object.keys(trackedElements).forEach((selector) => {
-                    const tracked = trackedElements[selector];
-                    if (tracked && tracked.events) {
-                        tracked.events.removeAllListeners(event);
-                    }
-                });
+                this._offViewableChangeByEvent(event);
             }
-            // clean up useless tracked
-            Object.keys(trackedElements).forEach((selector) => {
-                const tracked = trackedElements[selector];
-                if (tracked && tracked.events) {
-                    if (tracked.events.listenerCount(BEGIN) === 0 && tracked.events.listenerCount(END) === 0) {
-                        // Reflect.deleteProperty(trackedElements, selector);
-                        delete trackedElements[selector];
-                    }
-                }
-            });
+            this._cleanUpTracked();
         } else {
-            // : remove all callbacks for all selectors, all events
-            Object.keys(trackedElements).forEach((selector) => {
-                // Reflect.deleteProperty(trackedElements, selector);
-                delete trackedElements[selector];
-            });
+            this._offViewableChangeAll();
         }
         return this;
     }
 
-    _handlers() {
-
+    _offViewableChangeBySelector(event, selector, callback) {
         const trackedElements = this._trackedElements;
-        const selectors = Object.keys(trackedElements);
-
-        selectors.forEach((selector) => {
+        if (callback) {
+            // event, selector, callback: remove single callback for this selector, this event
             const tracked = trackedElements[selector];
-            const previousNodes = tracked.nodes;
-
-            tracked.nodes = [];
-
-            const currentNodes = document.querySelectorAll(selector);
-
-            Array.prototype.forEach.call(currentNodes, (currentNode) => {
-                let wasVisible = false;
-                if (previousNodes) {
-                    previousNodes.forEach((previousItem) => {
-                        const previousNode = previousItem.node;
-                        if (!previousItem.marked && previousNode === currentNode) {
-                            wasVisible = previousItem.isVisible;
-                            previousItem.marked = true;
-                        }
-                    });
-                }
-
-                const item = {
-                    isVisible: this.isViewable(currentNode),
-                    wasVisible,
-                    node: currentNode
-                };
-
-                tracked.nodes.push(item);
-
-                if (item.isVisible === true && item.wasVisible === false) {
-                    tracked.events.emit(BEGIN, currentNode);
-                }
-                if (item.isVisible === false && item.wasVisible === true) {
-                    tracked.events.emit(END, currentNode);
-                }
-            });
-
-            if (previousNodes) {
-                // for removed nodes
-                previousNodes.forEach((previousItem) => {
-                    if (!previousItem.marked) {
-                        if (previousItem.isVisible) {
-                            tracked.events.emit(END, previousItem.node);
-                        }
-                    }
-                });
+            if (tracked && tracked.events) {
+                tracked.events.removeListener(event, callback);
             }
-        });
-
+        } else {
+            // event, selector: remove all callbacks for this selector, this event
+            const tracked = trackedElements[selector];
+            if (tracked && tracked.events) {
+                tracked.events.removeAllListeners(event);
+            }
+        }
         return this;
     }
 
+    _offViewableChangeByEvent(event) {
+        const trackedElements = this._trackedElements;
+        // event: remove all callbacks for all selectors, this event
+        Object.keys(trackedElements).forEach((selector) => {
+            const tracked = trackedElements[selector];
+            if (tracked && tracked.events) {
+                tracked.events.removeAllListeners(event);
+            }
+        });
+        return this;
+    }
+
+    _offViewableChangeAll() {
+        const trackedElements = this._trackedElements;
+        // : remove all callbacks for all selectors, all events
+        Object.keys(trackedElements).forEach((selector) => {
+            // Reflect.deleteProperty(trackedElements, selector);
+            delete trackedElements[selector];
+        });
+        return this;
+    }
+
+    _cleanUpTracked() {
+        const trackedElements = this._trackedElements;
+        // clean up useless tracked
+        Object.keys(trackedElements).forEach((selector) => {
+            const tracked = trackedElements[selector];
+            if (tracked && tracked.events) {
+                if (tracked.events.listenerCount(eventTypes.BEGIN) === 0 &&
+                    tracked.events.listenerCount(eventTypes.END) === 0) {
+                    // Reflect.deleteProperty(trackedElements, selector);
+                    delete trackedElements[selector];
+                }
+            }
+        });
+        return this;
+    }
+
+    _isViewableChangeEvent(event) {
+        return Object.keys(eventTypes).some((constant) => {
+            return eventTypes[constant] === event;
+        });
+    }
+
+    _isObserverEvent(event) {
+        return Object.keys(observerTypes).some((constant) => {
+            return eventTypes[constant] === event;
+        })
+    }
 };

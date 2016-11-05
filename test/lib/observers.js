@@ -3,6 +3,7 @@
  * @author vivaxy
  */
 
+import * as observerTypes from '../../source/configs/observers';
 import observers from '../../source/lib/observers';
 
 describe('observers', () => {
@@ -17,14 +18,17 @@ describe('observers', () => {
         const element = document.createElement('div');
         const observer = observers(element);
         let flag = 0;
-        const callback = () => {
+        let type;
+        const callback = (_type) => {
             flag++;
+            type = _type;
         };
         observer.on(callback);
         expect(flag).to.equal(0);
         document.body.appendChild(element);
         setTimeout(() => {
             expect(flag).to.equal(1);
+            expect(type).to.equal(observerTypes.MUTATION);
             done();
         }, 0);
     });
