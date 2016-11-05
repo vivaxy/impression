@@ -10,6 +10,7 @@ import getObservers from './lib/observers';
 import debounceCallback from './lib/debounce';
 import diffTrackedElements from './lib/diffTrackedElements';
 import endTrackedElements from './lib/endTrackedElements';
+import isValueIn from './lib/isValueIn';
 
 import * as observerTypes from './configs/observers';
 import * as eventTypes from './configs/events';
@@ -62,7 +63,7 @@ module.exports = exports.default = class {
     }
 
     on(event, selector, callback) {
-        if (this._isViewableChangeEvent(event)) {
+        if (isValueIn(event, eventTypes)) {
             this._onViewableChange(event, selector, callback);
         } else {
             throw new Error(`impression: event not accepted: ${event}`);
@@ -71,7 +72,7 @@ module.exports = exports.default = class {
     }
 
     once(event, selector, callback) {
-        if (this._isViewableChangeEvent(event)) {
+        if (isValueIn(event, eventTypes)) {
             this._onceViewableChange(event, selector, callback);
         } else {
             throw new Error(`impression: event not accepted: ${event}`);
@@ -85,7 +86,7 @@ module.exports = exports.default = class {
     }
 
     onObservers(event, callback) {
-        if (this._isObserverEvent(event)) {
+        if (isValueIn(event, observerTypes)) {
             this._events.on(event, callback);
         } else {
             throw new Error(`impression: event not accepted: ${event}`);
@@ -94,7 +95,7 @@ module.exports = exports.default = class {
     }
 
     onceObservers(event, callback) {
-        if (this._isObserverEvent(event)) {
+        if (isValueIn(event, observerTypes)) {
             this._events.once(event, callback);
         } else {
             throw new Error(`impression: event not accepted: ${event}`);
@@ -228,15 +229,4 @@ module.exports = exports.default = class {
         return this;
     }
 
-    _isViewableChangeEvent(event) {
-        return Object.keys(eventTypes).some((constant) => {
-            return eventTypes[constant] === event;
-        });
-    }
-
-    _isObserverEvent(event) {
-        return Object.keys(observerTypes).some((constant) => {
-            return eventTypes[constant] === event;
-        })
-    }
 };

@@ -4,6 +4,7 @@
  */
 
 import * as eventTypes from '../source/configs/events';
+import * as observerTypes from '../source/configs/observers';
 import Impression from '../source/index';
 
 describe('Impression', () => {
@@ -43,6 +44,18 @@ describe('Impression', () => {
         }, 200);
     });
 
+    it('should throw error when attached event is not accepted', (done) => {
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        expect(impression.on.bind(impression, `enter`)).to.throw(`impression: event not accepted: enter`);
+        expect(impression.once.bind(impression, `leave`)).to.throw(`impression: event not accepted: leave`);
+        impression.detach();
+        done();
+    });
+
     it('should able to trigger once', (done) => {
         const SELECTOR4 = '[data-impression-unique-id="4"]';
         const impression = new Impression({
@@ -70,6 +83,7 @@ describe('Impression', () => {
             document.body.removeChild(div);
             setTimeout(() => {
                 expect(flag).to.equal(1);
+                impression.detach();
                 done();
             }, 200);
         }, 200);
@@ -103,6 +117,7 @@ describe('Impression', () => {
             document.body.removeChild(div);
             setTimeout(() => {
                 expect(flag).to.equal(1);
+                impression.detach();
                 done();
             }, 200);
         }, 200);
@@ -136,6 +151,7 @@ describe('Impression', () => {
             document.body.removeChild(div);
             setTimeout(() => {
                 expect(flag).to.equal(1);
+                impression.detach();
                 done();
             }, 200);
         }, 200);
@@ -169,6 +185,7 @@ describe('Impression', () => {
             document.body.removeChild(div);
             setTimeout(() => {
                 expect(flag).to.equal(1);
+                impression.detach();
                 done();
             }, 200);
         }, 200);
@@ -202,6 +219,7 @@ describe('Impression', () => {
             document.body.removeChild(div);
             setTimeout(() => {
                 expect(flag).to.equal(1);
+                impression.detach();
                 done();
             }, 200);
         }, 200);
@@ -242,8 +260,140 @@ describe('Impression', () => {
             setTimeout(() => {
                 expect(flagBegin).to.equal(1);
                 expect(flagEnd).to.equal(1);
+                impression.detach();
                 done();
             }, 200);
+        }, 200);
+    });
+
+    it('should able to detach observers', (done) => {
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        let flag = 0;
+        const callback = () => {
+            flag++;
+        };
+        impression.onObservers(observerTypes.MUTATION, callback);
+        expect(flag).to.equal(0);
+        const div = document.createElement('div');
+        document.body.appendChild(div);
+        setTimeout(() => {
+            expect(flag).to.equal(1);
+            document.body.removeChild(div);
+            impression.detach();
+            done();
+        }, 200);
+    });
+
+    it('should able to detach observers once', (done) => {
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        let flag = 0;
+        const callback = () => {
+            flag++;
+        };
+        impression.onceObservers(observerTypes.MUTATION, callback);
+        expect(flag).to.equal(0);
+        const div = document.createElement('div');
+        document.body.appendChild(div);
+        setTimeout(() => {
+            expect(flag).to.equal(1);
+            document.body.removeChild(div);
+            setTimeout(() => {
+                expect(flag).to.equal(1);
+                impression.detach();
+            }, 200);
+            done();
+        }, 200);
+    });
+
+    it('should throw error when attached event is not accepted', (done) => {
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        expect(impression.onObservers.bind(impression, `enter`)).to.throw(`impression: event not accepted: enter`);
+        expect(impression.onceObservers.bind(impression, `leave`)).to.throw(`impression: event not accepted: leave`);
+        impression.detach();
+        done();
+    });
+
+    it('should able to off event, callback', (done) => {
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        let flag = 0;
+        const callback = () => {
+            flag++;
+        };
+        impression.onObservers(observerTypes.MUTATION, callback);
+        expect(flag).to.equal(0);
+        impression.offObservers(observerTypes.MUTATION, callback);
+        expect(flag).to.equal(0);
+        const div = document.createElement('div');
+        document.body.appendChild(div);
+        setTimeout(() => {
+            expect(flag).to.equal(0);
+            document.body.removeChild(div);
+            impression.detach();
+            done();
+        }, 200);
+    });
+
+    it('should able to off event, callback', (done) => {
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        let flag = 0;
+        const callback = () => {
+            flag++;
+        };
+        impression.onObservers(observerTypes.MUTATION, callback);
+        expect(flag).to.equal(0);
+        impression.offObservers(observerTypes.MUTATION);
+        expect(flag).to.equal(0);
+        const div = document.createElement('div');
+        document.body.appendChild(div);
+        setTimeout(() => {
+            expect(flag).to.equal(0);
+            document.body.removeChild(div);
+            impression.detach();
+            done();
+        }, 200);
+    });
+
+    it('should able to off event, callback', (done) => {
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        let flag = 0;
+        const callback = () => {
+            flag++;
+        };
+        impression.onObservers(observerTypes.MUTATION, callback);
+        expect(flag).to.equal(0);
+        impression.offObservers();
+        expect(flag).to.equal(0);
+        const div = document.createElement('div');
+        document.body.appendChild(div);
+        setTimeout(() => {
+            expect(flag).to.equal(0);
+            document.body.removeChild(div);
+            impression.detach();
+            done();
         }, 200);
     });
 });
