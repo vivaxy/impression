@@ -25,7 +25,7 @@ IE9+, chrome, safari, firefox, opera...
 
 ### browser
 
-Use [standalone](./bundle/index.js), wrapped in umd, bundled with webpack.
+`<script src="./bundle/index.js"></script>`
 
 ## Usage
 
