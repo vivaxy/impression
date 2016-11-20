@@ -1,6 +1,6 @@
 # impression
 
-![impression](./assets/images/impression.jpg)
+![impression](./assets/images/impression.png)
 
 [![Build Status][travis-image]][travis-url]
 [![NPM Version][npm-version-image]][npm-url]
