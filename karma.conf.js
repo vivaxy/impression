@@ -33,7 +33,7 @@ module.exports = function(config) {
         webpack: webpackConfig,
         singleRun: true,
         reporters: [
-            'progress',
+            'mocha',
             'coverage',
         ],
         coverageReporter: {
