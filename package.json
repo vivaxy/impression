@@ -14,7 +14,10 @@
     "url": "git+https://github.com/vivaxy/impression.git"
   },
   "keywords": [
-    "impression"
+    "impression",
+    "viewable",
+    "on-screen",
+    "advertisement"
   ],
   "author": "vivaxy",
   "license": "MIT",
