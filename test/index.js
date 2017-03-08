@@ -8,6 +8,21 @@ import * as observerTypes from '../source/configs/observers';
 import Impression from '../source/index';
 
 describe('Impression', () => {
+
+    it('should use default options', (done) => {
+        const impression = new Impression();
+        expect(impression._container).to.equal(window);
+        expect(impression._tolerance).to.equal(0);
+        expect(impression._debounce).to.equal(100);
+        const impression2 = new Impression({
+            debounce: 1000,
+        });
+        expect(impression2._container).to.equal(window);
+        expect(impression2._tolerance).to.equal(0);
+        expect(impression2._debounce).to.equal(1000);
+        done();
+    });
+
     it('should has valid properties', (done) => {
         const impression = new Impression();
         expect(impression).to.have.property('on');

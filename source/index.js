@@ -19,17 +19,11 @@ const EventEmitter = events.EventEmitter;
 
 module.exports = exports.default = class {
 
-    constructor(options = {
-        tolerance: 0,
-        debounce: 100,
-        container: window,
-    }) {
-        const {
-            tolerance,
-            debounce,
-            container,
-        } = options;
-
+    constructor({
+        tolerance = 0,
+        debounce = 100,
+        container = window,
+    } = {}) {
         this._attached = false;
         this._trackedElements = {};
         this._tolerance = tolerance;

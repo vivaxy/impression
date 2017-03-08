@@ -1,13 +1,14 @@
 {
   "name": "impression.js",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "impression",
   "main": "./dist/index.js",
   "scripts": {
     "build": "npm run build:dist && npm run build:bundle",
     "build:dist": "babel ./source --out-dir ./dist",
     "build:bundle": "webpack",
-    "test": "NODE_ENV=test karma start"
+    "test": "NODE_ENV=test karma start",
+    "release": "standard-version && git push --follow-tags && npm publish"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
   "homepage": "https://github.com/vivaxy/impression#readme",
   "devDependencies": {
     "babel-cli": "^6.18.0",
+    "babel-core": "^6.23.1",
     "babel-loader": "^6.2.7",
     "babel-plugin-istanbul": "^2.0.3",
     "babel-plugin-syntax-async-functions": "^6.13.0",
@@ -45,6 +47,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.8.0",
     "mocha": "^3.1.2",
+    "standard-version": "^4.0.0",
     "webpack": "^1.13.3"
   },
   "dependencies": {
