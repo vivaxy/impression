@@ -29,6 +29,10 @@ var _endTrackedElements = require('./lib/endTrackedElements');
 
 var _endTrackedElements2 = _interopRequireDefault(_endTrackedElements);
 
+var _isValueIn = require('./lib/isValueIn');
+
+var _isValueIn2 = _interopRequireDefault(_isValueIn);
+
 var _observers3 = require('./configs/observers');
 
 var observerTypes = _interopRequireWildcard(_observers3);
@@ -47,18 +51,15 @@ var EventEmitter = _events2.default.EventEmitter;
 
 module.exports = exports.default = function () {
     function _class() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-            tolerance: 0,
-            debounce: 100,
-            container: window
-        };
+        var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            _ref$tolerance = _ref.tolerance,
+            tolerance = _ref$tolerance === undefined ? 0 : _ref$tolerance,
+            _ref$debounce = _ref.debounce,
+            debounce = _ref$debounce === undefined ? 100 : _ref$debounce,
+            _ref$container = _ref.container,
+            container = _ref$container === undefined ? window : _ref$container;
 
         _classCallCheck(this, _class);
-
-        var tolerance = options.tolerance,
-            debounce = options.debounce,
-            container = options.container;
-
 
         this._attached = false;
         this._trackedElements = {};
@@ -98,7 +99,7 @@ module.exports = exports.default = function () {
     }, {
         key: 'on',
         value: function on(event, selector, callback) {
-            if (this._isViewableChangeEvent(event)) {
+            if ((0, _isValueIn2.default)(event, eventTypes)) {
                 this._onViewableChange(event, selector, callback);
             } else {
                 throw new Error('impression: event not accepted: ' + event);
@@ -108,7 +109,7 @@ module.exports = exports.default = function () {
     }, {
         key: 'once',
         value: function once(event, selector, callback) {
-            if (this._isViewableChangeEvent(event)) {
+            if ((0, _isValueIn2.default)(event, eventTypes)) {
                 this._onceViewableChange(event, selector, callback);
             } else {
                 throw new Error('impression: event not accepted: ' + event);
@@ -124,7 +125,7 @@ module.exports = exports.default = function () {
     }, {
         key: 'onObservers',
         value: function onObservers(event, callback) {
-            if (this._isObserverEvent(event)) {
+            if ((0, _isValueIn2.default)(event, observerTypes)) {
                 this._events.on(event, callback);
             } else {
                 throw new Error('impression: event not accepted: ' + event);
@@ -134,7 +135,7 @@ module.exports = exports.default = function () {
     }, {
         key: 'onceObservers',
         value: function onceObservers(event, callback) {
-            if (this._isObserverEvent(event)) {
+            if ((0, _isValueIn2.default)(event, observerTypes)) {
                 this._events.once(event, callback);
             } else {
                 throw new Error('impression: event not accepted: ' + event);
@@ -274,20 +275,6 @@ module.exports = exports.default = function () {
                 }
             });
             return this;
-        }
-    }, {
-        key: '_isViewableChangeEvent',
-        value: function _isViewableChangeEvent(event) {
-            return Object.keys(eventTypes).some(function (constant) {
-                return eventTypes[constant] === event;
-            });
-        }
-    }, {
-        key: '_isObserverEvent',
-        value: function _isObserverEvent(event) {
-            return Object.keys(observerTypes).some(function (constant) {
-                return eventTypes[constant] === event;
-            });
         }
     }]);
 

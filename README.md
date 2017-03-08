@@ -44,9 +44,9 @@ impression.on('end', '#test', (element) => {
 
 ## API
 
-### *constructor* `Impression` => `impression`
+### *constructor* `Impression` => `{Impression}`
 
-`let impression = new Impression(options)`
+`const impression = new Impression(options)`
 
 ### `isViewable` => `{Boolean}`
 
@@ -54,13 +54,13 @@ impression.on('end', '#test', (element) => {
 
 Only accepts a single element.
 
-### `on` => `impression`
+### `on` => `{Impression}`
 
 `impression.on(event, selector, callback)`
 
 `callback(element, { type, direction })`
 
-### `off` => `impression`
+### `off` => `{Impression}`
 
 `impression.off(event, selector, callback)`
 
@@ -70,27 +70,27 @@ Only accepts a single element.
 
 `impression.off()`
 
-### `once` => `impression`
+### `once` => `{Impression}`
 
 `impression.once(event, selector, callback)`
 
-### `attach` => `impression`
+### `attach` => `{Impression}`
 
 `impression.attach()`
 
-### `detach` => `impression`
+### `detach` => `{Impression}`
 
 `impression.detach()`
 
-### `onObservers` => `impression`
+### `onObservers` => `{Impression}`
 
 `impression.onObservers(type, callback)`
 
-### `onceObservers` => `impression`
+### `onceObservers` => `{Impression}`
 
 `impression.onceObservers(type, callback)`
 
-### `offObservers` => `impression`
+### `offObservers` => `{Impression}`
 
 `impression.offObservers(type, callback)`
 
