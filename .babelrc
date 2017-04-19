@@ -4,12 +4,5 @@
         "stage-0"
     ],
     "plugins": [
-    ],
-    "env": {
-        "test": {
-            "plugins": [
-                "istanbul"
-            ]
-        }
-    }
+    ]
 }

@@ -6,8 +6,8 @@
 const webpackConfig = require('./webpack.config');
 
 webpackConfig.devtool = 'cheap-inline-source-map';
-webpackConfig.entry = {};
-webpackConfig.output = {};
+// webpackConfig.entry = {};
+// webpackConfig.output = {};
 
 module.exports = function(config) {
     config.set({

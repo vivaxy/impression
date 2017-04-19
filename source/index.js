@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import events from 'events';
+import EventEmitter from 'eventemitter3';
 
 import validators from './lib/validators';
 import getObservers from './lib/observers';
@@ -15,15 +15,9 @@ import isValueIn from './lib/isValueIn';
 import * as observerTypes from './configs/observers';
 import * as eventTypes from './configs/events';
 
-const EventEmitter = events.EventEmitter;
-
 module.exports = exports.default = class Impression {
 
-    constructor({
-        tolerance = 0,
-        debounce = 100,
-        container = window,
-    } = {}) {
+    constructor({ tolerance = 0, debounce = 100, container = window } = {}) {
         this._attached = false;
         this._trackedElements = {};
         this._tolerance = tolerance;
@@ -213,8 +207,8 @@ module.exports = exports.default = class Impression {
         Object.keys(trackedElements).forEach((selector) => {
             const tracked = trackedElements[selector];
             if (tracked && tracked.events) {
-                if (tracked.events.listenerCount(eventTypes.BEGIN) === 0 &&
-                    tracked.events.listenerCount(eventTypes.END) === 0) {
+                if (tracked.events.listeners(eventTypes.BEGIN).length === 0 &&
+                    tracked.events.listeners(eventTypes.END).length === 0) {
                     // Reflect.deleteProperty(trackedElements, selector);
                     delete trackedElements[selector];
                 }
