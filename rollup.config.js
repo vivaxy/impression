@@ -4,7 +4,9 @@
  */
 
 import babel from 'rollup-plugin-babel';
-// import uglify from 'rollup-plugin-uglify'
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+// import uglify from 'rollup-plugin-uglify';
 
 export default {
     entry: 'source/index.js',
@@ -18,12 +20,8 @@ export default {
                 'stage-0',
             ],
         }),
+        resolve(),
+        commonjs(),
         // uglify(),
     ],
-    external: [
-        'eventemitter3'
-    ],
-    globals: {
-        eventemitter3: 'EventEmitter',
-    },
 };
