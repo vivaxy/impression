@@ -17,7 +17,7 @@ import * as eventTypes from './configs/events';
 
 const EventEmitter = events.EventEmitter;
 
-module.exports = exports.default = class {
+module.exports = exports.default = class Impression {
 
     constructor({
         tolerance = 0,
