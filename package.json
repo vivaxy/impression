@@ -4,13 +4,13 @@
   "description": "impression",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "npm run build:dist && npm run build:bundle",
+    "build": "npm run test && npm run build:dist && npm run build:bundle",
     "build:dist": "babel ./source --out-dir ./dist",
     "build:bundle": "rm -rf bundle && mkdir bundle && npm run build:bundle:webpack && npm run build:bundle:rollup",
     "build:bundle:webpack": "webpack",
     "build:bundle:rollup": "rollup -c --environment production",
     "test": "NODE_ENV=test karma start",
-    "release": "standard-version && git push --follow-tags && npm publish"
+    "release": "npm run build && standard-version && git push --follow-tags && npm publish"
   },
   "repository": {
     "type": "git",
