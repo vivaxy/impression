@@ -4,10 +4,6 @@
         "stage-0"
     ],
     "plugins": [
-        "transform-function-bind",
-        "syntax-async-functions",
-        "transform-decorators-legacy",
-        "transform-class-properties"
     ],
     "env": {
         "test": {
