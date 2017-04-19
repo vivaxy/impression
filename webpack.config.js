@@ -3,6 +3,7 @@
  * @author vivaxy
  */
 
+const webpack = require('webpack');
 const path = require('path');
 
 const SOURCE_PATH = 'source';
@@ -14,29 +15,46 @@ const webpackConfig = {
     },
     output: {
         path: path.resolve(__dirname, `${RELEASE_PATH}`),
-        filename: '[name].js',
+        filename: 'index.webpack.js',
         library: `Impression`,
         libraryTarget: 'umd',
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
-                includes: [
-                    './source/**/*.js',
-                    './test/**/*.js',
-                ],
-                loaders: [
-                    'babel',
-                ]
+                exclude: ['node_modules'],
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            [
+                                'es2015',
+                                {
+                                    modules: false,
+                                },
+                            ],
+                            'stage-0',
+                        ],
+                        env: {
+                            test: {
+                                plugins: [
+                                    'istanbul',
+                                ],
+                            },
+                        },
+                    },
+                },
             },
             {
                 test: /\.json$/,
-                loader: 'json',
+                loader: 'json-loader',
             },
         ],
     },
-    plugins: [],
+    plugins: [
+        // new webpack.optimize.UglifyJsPlugin(),
+    ],
 };
 
 module.exports = webpackConfig;

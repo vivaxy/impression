@@ -5,9 +5,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @author vivaxy
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _events = require('events');
+var _eventemitter = require('eventemitter3');
 
-var _events2 = _interopRequireDefault(_events);
+var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
 var _validators = require('./lib/validators');
 
@@ -37,9 +37,9 @@ var _observers3 = require('./configs/observers');
 
 var observerTypes = _interopRequireWildcard(_observers3);
 
-var _events3 = require('./configs/events');
+var _events = require('./configs/events');
 
-var eventTypes = _interopRequireWildcard(_events3);
+var eventTypes = _interopRequireWildcard(_events);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -47,10 +47,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var EventEmitter = _events2.default.EventEmitter;
-
 module.exports = exports.default = function () {
-    function _class() {
+    function Impression() {
         var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             _ref$tolerance = _ref.tolerance,
             tolerance = _ref$tolerance === undefined ? 0 : _ref$tolerance,
@@ -59,7 +57,7 @@ module.exports = exports.default = function () {
             _ref$container = _ref.container,
             container = _ref$container === undefined ? window : _ref$container;
 
-        _classCallCheck(this, _class);
+        _classCallCheck(this, Impression);
 
         this._attached = false;
         this._trackedElements = {};
@@ -68,12 +66,12 @@ module.exports = exports.default = function () {
         this._container = container;
         this._observers = (0, _observers2.default)(this._container);
         this._handler = (0, _debounce2.default)(this._handlers.bind(this), this._debounce);
-        this._events = new EventEmitter();
+        this._events = new _eventemitter2.default();
 
         this.attach();
     }
 
-    _createClass(_class, [{
+    _createClass(Impression, [{
         key: 'attach',
         value: function attach() {
             if (!this._attached) {
@@ -181,7 +179,7 @@ module.exports = exports.default = function () {
                 tracked.nodes = [];
             }
             if (!tracked.events) {
-                tracked.events = new EventEmitter();
+                tracked.events = new _eventemitter2.default();
             }
             tracked.events.on(event, callback);
             return this;
@@ -197,7 +195,7 @@ module.exports = exports.default = function () {
                 tracked.nodes = [];
             }
             if (!tracked.events) {
-                tracked.events = new EventEmitter();
+                tracked.events = new _eventemitter2.default();
             }
             tracked.events.once(event, callback);
             return this;
@@ -268,7 +266,7 @@ module.exports = exports.default = function () {
             Object.keys(trackedElements).forEach(function (selector) {
                 var tracked = trackedElements[selector];
                 if (tracked && tracked.events) {
-                    if (tracked.events.listenerCount(eventTypes.BEGIN) === 0 && tracked.events.listenerCount(eventTypes.END) === 0) {
+                    if (tracked.events.listeners(eventTypes.BEGIN).length === 0 && tracked.events.listeners(eventTypes.END).length === 0) {
                         // Reflect.deleteProperty(trackedElements, selector);
                         delete trackedElements[selector];
                     }
@@ -278,5 +276,5 @@ module.exports = exports.default = function () {
         }
     }]);
 
-    return _class;
+    return Impression;
 }();
