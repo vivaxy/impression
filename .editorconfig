@@ -17,5 +17,5 @@ quote_type = single
 [*.{html,less,css,json}]
 quote_type = double
 
-[{package,cortex,f2eci}.json]
+[package.json]
 indent_size = 2
