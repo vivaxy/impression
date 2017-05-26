@@ -11,6 +11,8 @@ import commonjs from 'rollup-plugin-commonjs';
 export default {
     entry: 'source/index.js',
     format: 'umd',
+    exports: 'default',
+    moduleName: 'Impression',
     dest: 'bundle/index.rollup.js',
     plugins: [
         babel({

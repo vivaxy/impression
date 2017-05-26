@@ -15,7 +15,7 @@ import isValueIn from './lib/isValueIn';
 import * as observerTypes from './configs/observers';
 import * as eventTypes from './configs/events';
 
-module.exports = exports.default = class Impression {
+export default class Impression {
 
     constructor({ tolerance = 0, debounce = 100, container = window } = {}) {
         this._attached = false;
@@ -217,4 +217,4 @@ module.exports = exports.default = class Impression {
         return this;
     }
 
-};
+}

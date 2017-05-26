@@ -1,7 +1,7 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
+	(global.Impression = factory());
 }(this, (function () { 'use strict';
 
 function createCommonjsModule(fn, module) {
@@ -856,7 +856,7 @@ var createClass = function () {
  * @author vivaxy
  */
 
-module.exports = exports.default = function () {
+var Impression = function () {
     function Impression() {
         var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             _ref$tolerance = _ref.tolerance,
@@ -1086,5 +1086,7 @@ module.exports = exports.default = function () {
     }]);
     return Impression;
 }();
+
+return Impression;
 
 })));
