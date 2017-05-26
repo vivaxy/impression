@@ -461,7 +461,7 @@ var RESIZE = 'resize';
 var SCROLL = 'scroll';
 var UNLOAD = 'unload';
 
-var observerTypes = Object.freeze({
+var observerTypes = (Object.freeze || Object)({
 	MUTATION: MUTATION,
 	RESIZE: RESIZE,
 	SCROLL: SCROLL,
@@ -718,7 +718,7 @@ var debounceCallback = (function (callback, timeout) {
 var BEGIN = 'begin';
 var END = 'end';
 
-var eventTypes = Object.freeze({
+var eventTypes = (Object.freeze || Object)({
 	BEGIN: BEGIN,
 	END: END
 });

@@ -24,4 +24,5 @@ export default {
         commonjs(),
         // uglify(),
     ],
+    legacy: true,
 };
