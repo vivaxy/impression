@@ -6,6 +6,8 @@
 import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+
+const packageJSON = require('./package.json');
 // import uglify from 'rollup-plugin-uglify';
 
 export default {
@@ -13,7 +15,7 @@ export default {
     format: 'umd',
     exports: 'default',
     moduleName: 'Impression',
-    dest: 'bundle/index.rollup.js',
+    dest: 'bundle/impression.rollup.js',
     plugins: [
         babel({
             babelrc: false,
@@ -27,4 +29,5 @@ export default {
         // uglify(),
     ],
     legacy: true,
+    banner: `/* ${packageJSON.name}@v${packageJSON.version} by ${packageJSON.author} */`,
 };

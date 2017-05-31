@@ -21,17 +21,18 @@ IE9+, chrome, safari, firefox, opera...
 
 ### npm
 
-`npm install impression.js`
+`npm install @vivaxy/impression`
 
 ### browser
 
-`<script src="./bundle/index.webpack.js"></script>`
-`<script src="./bundle/index.rollup.js"></script>`
+`<script src="./bundle/impression.rollup.js"></script>`
+
+`<script src="./bundle/impression.webpack.js"></script>`
 
 ## Usage
 
 ```js
-import Impression from 'impression.js';
+import Impression from '@vivaxy/impression';
 let impression = new Impression();
 let element = document.querySelector('#test');
 impression.isViewable(element); // => true
@@ -156,10 +157,10 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element, { type }) => {
 
 [travis-image]: https://img.shields.io/travis/vivaxy/impression.svg?style=flat-square
 [travis-url]: https://travis-ci.org/vivaxy/impression
-[npm-version-image]: http://img.shields.io/npm/v/impression.js.svg?style=flat-square
-[npm-url]: https://www.npmjs.com/package/impression.js
-[npm-downloads-image]: https://img.shields.io/npm/dt/impression.js.svg?style=flat-square
-[license-image]: https://img.shields.io/npm/l/impression.js.svg?style=flat-square
+[npm-version-image]: http://img.shields.io/npm/v/@vivaxy/impression.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/@vivaxy/impression
+[npm-downloads-image]: https://img.shields.io/npm/dt/@vivaxy/impression.svg?style=flat-square
+[license-image]: https://img.shields.io/npm/l/@vivaxy/impression.svg?style=flat-square
 [license-url]: LICENSE
 [codecov-image]: https://img.shields.io/codecov/c/github/vivaxy/impression.svg?style=flat-square
 [codecov-url]: https://codecov.io/gh/vivaxy/impression
