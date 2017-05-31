@@ -33,8 +33,8 @@ IE9+, chrome, safari, firefox, opera...
 
 ```js
 import Impression from '@vivaxy/impression';
-let impression = new Impression();
-let element = document.querySelector('#test');
+const impression = new Impression();
+const element = document.querySelector('#test');
 impression.isViewable(element); // => true
 impression.on('begin', '#test', (element) => {
     console.log(`element shown into view`, element);
