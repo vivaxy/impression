@@ -3,8 +3,10 @@
  * @author vivaxy
  */
 
-const webpack = require('webpack');
 const path = require('path');
+const webpack = require('webpack');
+
+const packageJSON = require('./package.json');
 
 const SOURCE_PATH = 'source';
 const RELEASE_PATH = 'bundle';
@@ -15,7 +17,7 @@ const webpackConfig = {
     },
     output: {
         path: path.resolve(__dirname, `${RELEASE_PATH}`),
-        filename: 'index.webpack.js',
+        filename: 'impression.webpack.js',
         library: `Impression`,
         libraryTarget: 'umd',
     },
@@ -54,6 +56,7 @@ const webpackConfig = {
     },
     plugins: [
         // new webpack.optimize.UglifyJsPlugin(),
+        new webpack.BannerPlugin(`${packageJSON.name}@v${packageJSON.version} by ${packageJSON.author}`),
     ],
 };
 
