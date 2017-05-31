@@ -25,8 +25,9 @@ IE9+, chrome, safari, firefox, opera...
 
 ### browser
 
-`<script src="./bundle/index.webpack.js"></script>`
-`<script src="./bundle/index.rollup.js"></script>`
+`<script src="./bundle/impression.rollup.js"></script>`
+
+`<script src="./bundle/impression.webpack.js"></script>`
 
 ## Usage
 
