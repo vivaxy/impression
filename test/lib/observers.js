@@ -17,17 +17,17 @@ describe('observers', () => {
     it('should be able to execute the callback', (done) => {
         const element = document.createElement('div');
         const observer = observers(element);
-        let flag = 0;
+        let count = 0;
         let type;
         const callback = (_type) => {
-            flag++;
+            count++;
             type = _type;
         };
         observer.on(callback);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         document.body.appendChild(element);
         setTimeout(() => {
-            expect(flag).to.equal(1);
+            expect(count).to.equal(1);
             expect(type).to.equal(observerTypes.MUTATION);
             done();
         }, 0);
@@ -35,20 +35,20 @@ describe('observers', () => {
     it('should be able to off the callback', (done) => {
         const element = document.createElement('div');
         const observer = observers(element);
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         observer.on(callback);
         observer.on(callback);
         observer.off(callback);
         document.body.appendChild(element);
         setTimeout(() => {
-            expect(flag).to.equal(0);
+            expect(count).to.equal(0);
             observer.off(callback);
             document.body.appendChild(element);
             setTimeout(() => {
-                expect(flag).to.equal(0);
+                expect(count).to.equal(0);
                 done();
             }, 0);
         }, 0);

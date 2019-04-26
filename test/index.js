@@ -41,19 +41,19 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         impression.detach();
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         const div = document.createElement('div');
         document.body.appendChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(0);
+            expect(count).to.equal(0);
             document.body.removeChild(div);
             done();
         }, 200);
@@ -78,26 +78,26 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.once(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         document.body.style.height = '400px';
         const div = document.createElement('div');
         document.body.appendChild(div);
         document.body.removeChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(1);
+            expect(count).to.equal(1);
             document.body.style.height = '100px';
             const div = document.createElement('div');
             document.body.appendChild(div);
             document.body.removeChild(div);
             setTimeout(() => {
-                expect(flag).to.equal(1);
+                expect(count).to.equal(1);
                 impression.detach();
                 done();
             }, 200);
@@ -111,27 +111,27 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         document.body.style.height = '400px';
         const div = document.createElement('div');
         document.body.appendChild(div);
         document.body.removeChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(1);
+            expect(count).to.equal(1);
             document.body.style.height = '100px';
             impression.off(eventTypes.BEGIN, SELECTOR4, callback);
             const div = document.createElement('div');
             document.body.appendChild(div);
             document.body.removeChild(div);
             setTimeout(() => {
-                expect(flag).to.equal(1);
+                expect(count).to.equal(1);
                 impression.detach();
                 done();
             }, 200);
@@ -145,27 +145,27 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         document.body.style.height = '400px';
         const div = document.createElement('div');
         document.body.appendChild(div);
         document.body.removeChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(1);
+            expect(count).to.equal(1);
             document.body.style.height = '100px';
             impression.off(eventTypes.BEGIN, SELECTOR4);
             const div = document.createElement('div');
             document.body.appendChild(div);
             document.body.removeChild(div);
             setTimeout(() => {
-                expect(flag).to.equal(1);
+                expect(count).to.equal(1);
                 impression.detach();
                 done();
             }, 200);
@@ -179,27 +179,27 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         document.body.style.height = '400px';
         const div = document.createElement('div');
         document.body.appendChild(div);
         document.body.removeChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(1);
+            expect(count).to.equal(1);
             document.body.style.height = '100px';
             impression.off(eventTypes.BEGIN);
             const div = document.createElement('div');
             document.body.appendChild(div);
             document.body.removeChild(div);
             setTimeout(() => {
-                expect(flag).to.equal(1);
+                expect(count).to.equal(1);
                 impression.detach();
                 done();
             }, 200);
@@ -213,27 +213,27 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.on(eventTypes.BEGIN, SELECTOR4, callback);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         document.body.style.height = '400px';
         const div = document.createElement('div');
         document.body.appendChild(div);
         document.body.removeChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(1);
+            expect(count).to.equal(1);
             document.body.style.height = '100px';
             impression.off();
             const div = document.createElement('div');
             document.body.appendChild(div);
             document.body.removeChild(div);
             setTimeout(() => {
-                expect(flag).to.equal(1);
+                expect(count).to.equal(1);
                 impression.detach();
                 done();
             }, 200);
@@ -247,20 +247,20 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flagBegin = 0;
+        let countBegin = 0;
         const callbackBegin = () => {
-            flagBegin++;
+            countBegin++;
         };
-        let flagEnd = 0;
+        let countEnd = 0;
         const callbackEnd = () => {
-            flagEnd++;
+            countEnd++;
         };
         impression.on(eventTypes.BEGIN, SELECTOR4, callbackBegin);
         impression.on(eventTypes.END, SELECTOR4, callbackEnd);
         const element4 = document.querySelector(SELECTOR4);
         expect(impression.isViewable(element4)).to.equal(false);
-        expect(flagBegin).to.equal(0);
-        expect(flagEnd).to.equal(0);
+        expect(countBegin).to.equal(0);
+        expect(countEnd).to.equal(0);
         document.body.style.height = '400px';
         const div = document.createElement('div');
         const container = document.querySelector('.container');
@@ -268,13 +268,13 @@ describe('Impression', () => {
         div.setAttribute('class', 'element');
         container.appendChild(div);
         setTimeout(() => {
-            expect(flagBegin).to.equal(1);
-            expect(flagEnd).to.equal(0);
+            expect(countBegin).to.equal(1);
+            expect(countEnd).to.equal(0);
             document.body.style.height = '100px';
             container.removeChild(element4);
             setTimeout(() => {
-                expect(flagBegin).to.equal(1);
-                expect(flagEnd).to.equal(1);
+                expect(countBegin).to.equal(1);
+                expect(countEnd).to.equal(1);
                 impression.detach();
                 done();
             }, 200);
@@ -287,16 +287,16 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.onObservers(observerTypes.MUTATION, callback);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         const div = document.createElement('div');
         document.body.appendChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(1);
+            expect(count).to.equal(1);
             document.body.removeChild(div);
             impression.detach();
             done();
@@ -309,19 +309,19 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.onceObservers(observerTypes.MUTATION, callback);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         const div = document.createElement('div');
         document.body.appendChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(1);
+            expect(count).to.equal(1);
             document.body.removeChild(div);
             setTimeout(() => {
-                expect(flag).to.equal(1);
+                expect(count).to.equal(1);
                 impression.detach();
             }, 200);
             done();
@@ -346,18 +346,18 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.onObservers(observerTypes.MUTATION, callback);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         impression.offObservers(observerTypes.MUTATION, callback);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         const div = document.createElement('div');
         document.body.appendChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(0);
+            expect(count).to.equal(0);
             document.body.removeChild(div);
             impression.detach();
             done();
@@ -370,18 +370,18 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.onObservers(observerTypes.MUTATION, callback);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         impression.offObservers(observerTypes.MUTATION);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         const div = document.createElement('div');
         document.body.appendChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(0);
+            expect(count).to.equal(0);
             document.body.removeChild(div);
             impression.detach();
             done();
@@ -394,19 +394,40 @@ describe('Impression', () => {
             tolerance: 0,
             debounce: 100,
         });
-        let flag = 0;
+        let count = 0;
         const callback = () => {
-            flag++;
+            count++;
         };
         impression.onObservers(observerTypes.MUTATION, callback);
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         impression.offObservers();
-        expect(flag).to.equal(0);
+        expect(count).to.equal(0);
         const div = document.createElement('div');
         document.body.appendChild(div);
         setTimeout(() => {
-            expect(flag).to.equal(0);
+            expect(count).to.equal(0);
             document.body.removeChild(div);
+            impression.detach();
+            done();
+        }, 200);
+    });
+
+    it('should able to scan elements', (done) => {
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        let count = 0;
+        const SELECTOR = '[data-impression-unique-id]';
+        impression.on('begin', SELECTOR, () => {
+            count++;
+        });
+        impression.scan();
+        setTimeout(() => {
+            expect(count).to.equal(Array.prototype.filter.call(document.querySelectorAll(SELECTOR), (el) => {
+                return impression.isViewable(el);
+            }).length);
             impression.detach();
             done();
         }, 200);

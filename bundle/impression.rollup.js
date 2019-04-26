@@ -900,6 +900,11 @@ var Impression = function () {
             return this;
         }
     }, {
+        key: 'scan',
+        value: function scan() {
+            diffTrackedElements(this._trackedElements, 'scan', this.isViewable.bind(this));
+        }
+    }, {
         key: 'isViewable',
         value: function isViewable(element) {
             return validators(element, this._container, this._tolerance);

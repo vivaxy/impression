@@ -42,15 +42,20 @@ impression.on('begin', '#test', (element) => {
 impression.on('end', '#test', (element) => {
     console.log(`element shown out of view`, element);
 });
+impression.scan(); // flush current viewable element
 ```
 
 ## API
 
 ### *constructor* `Impression` => `{Impression}`
 
+Initialize the instance.
+
 `const impression = new Impression(options)`
 
 ### `isViewable` => `{Boolean}`
+
+Test if an element is viewable.
 
 `impression.isViewable(element)`
 
@@ -58,11 +63,15 @@ Only accepts a single element.
 
 ### `on` => `{Impression}`
 
+Listen when elements match selector enter or leave the view.
+
 `impression.on(event, selector, callback)`
 
 `callback(element, { type, direction })`
 
 ### `off` => `{Impression}`
+
+Remove listeners.
 
 `impression.off(event, selector, callback)`
 
@@ -71,6 +80,12 @@ Only accepts a single element.
 `impression.off(event)`
 
 `impression.off()`
+
+### `scan` => `{Impression}`
+
+Scan page to update element status.
+
+`impression.scan()`
 
 ### `once` => `{Impression}`
 
@@ -146,6 +161,7 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element, { type }) => {
 - resize
 - scroll
 - unload
+- scan
 
 ## Reference
 

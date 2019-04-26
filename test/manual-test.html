@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>impression</title>
+    <style>
+        body {
+            margin: 0;
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            overflow: auto;
+        }
+
+        .element {
+            width: 100px;
+            height: 100px;
+        }
+
+        [data-impression-unique-id="1"] {
+            background-color: #f00;
+        }
+
+        [data-impression-unique-id="2"] {
+            background-color: #0ff;
+        }
+
+        [data-impression-unique-id="3"] {
+            background-color: #f0f;
+        }
+
+        [data-impression-unique-id="4"] {
+            background-color: #00f;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="element" data-impression-unique-id="1"></div>
+    <div class="element" data-impression-unique-id="2"></div>
+    <div class="element" data-impression-unique-id="3"></div>
+    <div class="element" data-impression-unique-id="4"></div>
+</div>
+
+<script src="../bundle/impression.rollup.js"></script>
+<script>
+    function init() {
+        const SELECTOR_ALL = '[data-impression-unique-id]';
+        const SELECTOR_4 = '[data-impression-unique-id="4"]';
+        const impression = new Impression({
+            container: document.body,
+            tolerance: 0,
+            debounce: 100,
+        });
+        let flagBegin = 0;
+        const callbackBegin = (el, info) => {
+            flagBegin++;
+            console.log('begin', flagBegin, el, info);
+        };
+        let flagEnd = 0;
+        const callbackEnd = (el, info) => {
+            flagEnd++;
+            console.log('end', flagEnd, el, info);
+        };
+
+        const element4 = document.querySelector(SELECTOR_4);
+        document.body.style.height = '400px';
+        const div = document.createElement('div');
+        const container = document.querySelector('.container');
+        div.setAttribute('data-impression-unique-id', '4');
+        div.setAttribute('class', 'element');
+        container.appendChild(div);
+
+        impression.on('begin', SELECTOR_ALL, callbackBegin);
+        impression.on('end', SELECTOR_ALL, callbackEnd);
+
+        setTimeout(() => {
+            document.body.style.height = '100px';
+            container.removeChild(element4);
+        }, 2000);
+        return impression;
+    }
+
+    if (document.readyState === 'complete') {
+        window.impression = init()
+    } else {
+        window.addEventListener('load', () => {
+            window.impression = init();
+        });
+    }
+</script>
+</body>
+</html>

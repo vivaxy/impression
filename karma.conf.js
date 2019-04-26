@@ -13,7 +13,7 @@ module.exports = function(config) {
     config.set({
         basePath: '',
         autoWatch: true,
-        customContextFile: './test/index.html',
+        customContextFile: './test/karma-test.html',
         frameworks: [
             'mocha',
             'chai',

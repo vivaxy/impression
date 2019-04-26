@@ -852,6 +852,11 @@ var Impression = function () {
             return this;
         }
     }, {
+        key: 'scan',
+        value: function scan() {
+            (0, _diffTrackedElements2.default)(this._trackedElements, 'scan', this.isViewable.bind(this));
+        }
+    }, {
         key: 'isViewable',
         value: function isViewable(element) {
             return (0, _validators2.default)(element, this._container, this._tolerance);

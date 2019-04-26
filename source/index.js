@@ -46,6 +46,10 @@ export default class Impression {
         return this;
     }
 
+    scan() {
+        diffTrackedElements(this._trackedElements, 'scan', ::this.isViewable);
+    }
+
     isViewable(element) {
         return validators(element, this._container, this._tolerance);
     }
