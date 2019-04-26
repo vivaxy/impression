@@ -154,6 +154,7 @@ impression.on('end', '[data-impression-uniqueid="1"]', (element, { type }) => {
 - [Code Coverage of Mocha Tests using Istanbul and Karma](https://ariya.io/2013/12/code-coverage-of-mocha-tests-using-istanbul-and-karma)
 - [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul)
 - [Chai Assertion Library BDD](http://chaijs.com/api/bdd/)
+- [in-view.js](https://github.com/camwiegert/in-view)
 
 [travis-image]: https://img.shields.io/travis/vivaxy/impression.svg?style=flat-square
 [travis-url]: https://travis-ci.org/vivaxy/impression

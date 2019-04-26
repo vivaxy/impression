@@ -20,7 +20,15 @@
     "impression",
     "viewable",
     "on-screen",
-    "advertisement"
+    "advertisement",
+    "in-view",
+    "onScreen",
+    "in-view.js",
+    "on screen",
+    "in view",
+    "dom change",
+    "mutation",
+    "dom mutation"
   ],
   "author": "vivaxy",
   "license": "MIT",
