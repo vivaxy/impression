@@ -21,7 +21,8 @@ export default (container) => {
                 return callback(observers.SCROLL);
             };
             presets(container);
-            container.addEventListener(SCROLL, _callback);
+            // `scroll` event not propagation when it happens in an element. Bind event at capture resolve this problem.
+            container.addEventListener(SCROLL, _callback, true);
 
             return true;
         }
@@ -29,7 +30,7 @@ export default (container) => {
 
     const off = () => {
         if (attached) {
-            container.removeEventListener(SCROLL, _callback);
+            container.removeEventListener(SCROLL, _callback, true);
             attached = false;
             return true;
         } else {

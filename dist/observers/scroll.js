@@ -36,7 +36,7 @@ exports.default = function (container) {
                 return callback(observers.SCROLL);
             };
             (0, _presets2.default)(container);
-            container.addEventListener(SCROLL, _callback);
+            container.addEventListener(SCROLL, _callback, true);
 
             return true;
         }
@@ -44,7 +44,7 @@ exports.default = function (container) {
 
     var off = function off() {
         if (attached) {
-            container.removeEventListener(SCROLL, _callback);
+            container.removeEventListener(SCROLL, _callback, true);
             attached = false;
             return true;
         } else {
