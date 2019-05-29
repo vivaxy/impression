@@ -595,6 +595,7 @@ var scrollEvents = (function (container) {
                 return callback(SCROLL);
             };
             presets(container);
+            // `scroll` event not propagation when it happens in an element. Bind event at capture resolve this problem.
             container.addEventListener(SCROLL$1, _callback, true);
 
             return true;

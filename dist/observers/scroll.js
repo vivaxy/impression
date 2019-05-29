@@ -36,6 +36,7 @@ exports.default = function (container) {
                 return callback(observers.SCROLL);
             };
             (0, _presets2.default)(container);
+            // `scroll` event not propagation when it happens in an element. Bind event at capture resolve this problem.
             container.addEventListener(SCROLL, _callback, true);
 
             return true;
