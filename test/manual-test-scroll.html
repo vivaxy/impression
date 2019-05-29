@@ -1,27 +1,41 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>impression</title>
     <link rel="stylesheet" href="manual-test.css">
+    <style>
+        .scroll-container {
+            overflow-x: scroll;
+            width: 100%;
+        }
+
+        .container {
+            width: 1000px;
+            font-size: 0;
+        }
+
+        .element {
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <div class="element" data-impression-unique-id="1"></div>
-    <div class="element" data-impression-unique-id="2"></div>
-    <div class="element" data-impression-unique-id="3"></div>
-    <div class="element" data-impression-unique-id="4"></div>
-    <div class="element" data-impression-unique-id="5"></div>
-    <div class="element" data-impression-unique-id="6"></div>
-    <div class="element" data-impression-unique-id="7"></div>
-    <div class="element" data-impression-unique-id="8"></div>
-    <div class="element" data-impression-unique-id="9"></div>
-    <div class="element" data-impression-unique-id="10"></div>
-    <div class="element" data-impression-unique-id="11"></div>
-    <div class="element" data-impression-unique-id="12"></div>
+<div class="scroll-container">
+    <div class="container">
+        <div class="element" data-impression-unique-id="1"></div>
+        <div class="element" data-impression-unique-id="2"></div>
+        <div class="element" data-impression-unique-id="3"></div>
+        <div class="element" data-impression-unique-id="4"></div>
+        <div class="element" data-impression-unique-id="5"></div>
+        <div class="element" data-impression-unique-id="6"></div>
+        <div class="element" data-impression-unique-id="7"></div>
+        <div class="element" data-impression-unique-id="8"></div>
+        <div class="element" data-impression-unique-id="9"></div>
+        <div class="element" data-impression-unique-id="10"></div>
+    </div>
 </div>
-
 <script src="../bundle/impression.rollup.js"></script>
 <script>
     function init() {

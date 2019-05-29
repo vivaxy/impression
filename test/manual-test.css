@@ -1,0 +1,42 @@
+/**
+ * @since 2019-05-29 20:58
+ * @author vivaxy
+ */
+
+html {
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    width: 100%;
+}
+
+.element {
+    width: 100px;
+    height: 100px;
+}
+
+.element:nth-child(6n) {
+    background-color: #f99;
+}
+
+.element:nth-child(6n+1) {
+    background-color: #9f9;
+}
+
+.element:nth-child(6n+2) {
+    background-color: #99f;
+}
+
+.element:nth-child(6n+3) {
+    background-color: #ff9;
+}
+
+.element:nth-child(6n+4) {
+    background-color: #f9f;
+}
+
+.element:nth-child(6n+5) {
+    background-color: #9ff;
+}

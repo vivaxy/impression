@@ -1,4 +1,4 @@
-/* @vivaxy/impression@v2.0.0 by vivaxy */
+/* @vivaxy/impression@v2.1.0 by vivaxy */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
@@ -595,7 +595,7 @@ var scrollEvents = (function (container) {
                 return callback(SCROLL);
             };
             presets(container);
-            container.addEventListener(SCROLL$1, _callback);
+            container.addEventListener(SCROLL$1, _callback, true);
 
             return true;
         }
@@ -603,7 +603,7 @@ var scrollEvents = (function (container) {
 
     var off = function off() {
         if (attached) {
-            container.removeEventListener(SCROLL$1, _callback);
+            container.removeEventListener(SCROLL$1, _callback, true);
             attached = false;
             return true;
         } else {
