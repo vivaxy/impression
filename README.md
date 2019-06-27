@@ -1,5 +1,7 @@
 # impression
 
+*See [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) and its [polyfill](https://github.com/w3c/IntersectionObserver/tree/master/polyfill) instead.*
+
 ![impression](./assets/images/impression.png)
 
 [![Build Status][travis-image]][travis-url]
