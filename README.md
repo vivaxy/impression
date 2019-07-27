@@ -1,7 +1,7 @@
 # impression
 
-*See [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) and its [polyfill](https://github.com/w3c/IntersectionObserver/tree/master/polyfill) instead.*
-
+*See [appear event](https://github.com/vivaxy/appear-event) instead.*
+*For React hook, see [useAppear](https://github.com/vivaxy/use-appear).*
 *For React components, see [react-lifecycle-appear](https://github.com/Broltes/react-lifecycle-appear).*
 
 ![impression](./assets/images/impression.png)
