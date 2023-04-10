@@ -13,6 +13,8 @@
 [![Codecov][codecov-image]][codecov-url]
 [![Codacy Badge][codacy-image]][codacy-url]
 
+[![DOI](https://zenodo.org/badge/72172752.svg)](https://zenodo.org/badge/latestdoi/72172752)
+
 Element [impression](https://en.wikipedia.org/wiki/Impression_(online_media)), for ads or user behaviour statistics.
 
 Written in es6 javascript, published as npm package as es5 along with a browser standalone.
